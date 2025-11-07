@@ -1,0 +1,67 @@
+.report-section {
+  margin-top: 50px;
+  padding: 30px;
+  background: linear-gradient(135deg, #2a2a3e 0%, #353550 100%);
+  border-radius: 15px;
+  border: 2px solid #6c5ce7;
+  box-shadow: 0 10px 30px rgba(108, 92, 231, 0.2);
+}
+
+.report-section h2 {
+  color: #6c5ce7;
+  margin-bottom: 25px;
+  font-size: 1.8rem;
+  text-align: center;
+}
+
+.clarity-score {
+  text-align: center;
+  padding: 25px;
+  margin: 20px 0;
+  background: linear-gradient(135deg, #6c5ce7 0%, #a29bfe 100%);
+  border-radius: 12px;
+}
+
+.clarity-score .score-number {
+  font-size: 4rem;
+  font-weight: bold;
+  color: white;
+  text-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+}
+
+.clarity-score .score-label {
+  font-size: 1.2rem;
+  color: rgba(255, 255, 255, 0.9);
+  margin-top: 10px;
+}
+
+.metric {
+  margin: 20px 0;
+  padding: 15px;
+  background: #1e1e2e;
+  border-radius: 8px;
+  border-left: 4px solid #6c5ce7;
+}
+
+.metric h3 {
+  color: #a29bfe;
+  margin-bottom: 10px;
+  font-size: 1.2rem;
+}
+
+.metric p {
+  line-height: 1.6;
+  font-size: 1.05rem;
+  color: #e0e0e0;
+}
+
+.metric ul {
+  margin-left: 20px;
+  margin-top: 10px;
+  color: #e0e0e0;
+}
+
+.metric li {
+  line-height: 1.6;
+  font-size: 1.05rem;
+}
