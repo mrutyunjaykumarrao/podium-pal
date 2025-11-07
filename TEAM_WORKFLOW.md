@@ -2,12 +2,24 @@
 
 ## 🔀 Branch Strategy
 
-### Main Branch Protection
-- `main` - Production-ready code only
-- All development happens in personal branches
-- Merge to main only after review
+### Three-Tier Branch System
+1. **`main`** - Production-ready code only (final integration)
+2. **`develop`** - Testing/integration branch (everyone works from here) ✅
+3. **Personal branches** - Individual development branches
 
-### Personal Branches (Already Created)
+### Branch Hierarchy:
+```
+main (production)
+  ↑
+develop (testing/integration) ← Everyone clones from here
+  ↑
+├── mrutyunjay (personal branch)
+├── reddi7 (personal branch)
+├── hamees (personal branch)
+└── nischay (personal branch)
+```
+
+### Personal Branches (Created from develop)
 - `mrutyunjay` - Your working branch ✅
 - Team members should create:
   - `reddi7` - For reddi7's work
@@ -20,13 +32,16 @@
 git clone https://github.com/mrutyunjaykumarrao/podium-pal.git
 cd podium-pal
 
-# 2. Create their personal branch
+# 2. Switch to develop branch (this is your base!)
+git checkout develop
+
+# 3. Create their personal branch from develop
 git checkout -b their-name
 
-# 3. Push their branch
+# 4. Push their branch
 git push -u origin their-name
 
-# 4. Start working!
+# 5. Start working!
 ```
 
 ---
@@ -160,27 +175,33 @@ git push -u origin their-name
 ### 2. **Communication Protocol**
 ```bash
 # Before starting work on a new day:
-git checkout main
-git pull origin main
+git checkout develop
+git pull origin develop
 git checkout your-name
-git merge main  # Get latest changes
+git merge develop  # Get latest changes from integration branch
 
 # After finishing work:
 git add .
 git commit -m "Clear description of what you did"
 git push origin your-name
+
+# When feature is ready:
+# Create PR: your-name → develop (NOT to main!)
 ```
 
 ### 3. **Pull Request Guidelines**
-- Create PR with clear title: `[Your-Name] Feature: Description`
+- Create PR: `your-name` → `develop` (NOT to main!)
+- PR title: `[Your-Name] Feature: Description`
 - Tag team members for review
-- Merge `main` into your branch before creating PR
-- One person reviews before merging
+- Merge `develop` into your branch before creating PR
+- At least one person reviews before merging
+- **Final step:** When `develop` is stable → create PR: `develop` → `main`
 
 ### 4. **Daily Sync**
 - Quick 5-min standup: What I did, what I'm doing, any blockers
 - Share which files you'll be working on
-- Merge `main` into personal branches daily
+- Pull latest `develop` and merge into personal branches daily
+- Test on `develop` branch before final merge to `main`
 
 ### 5. **Integration Points**
 For places where code needs to connect:
