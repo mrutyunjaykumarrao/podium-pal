@@ -1,13 +1,11 @@
 import { useState } from "react";
 import "./App.css";
-import TranscriptDisplay from "./components/TranscriptDisplay";
 import FeedbackReport from "./components/FeedbackReport";
 import ProfileMenu from "./components/ProfileMenu";
 import CollapsibleSidebar from "./components/CollapsibleSidebar";
 import ProgressiveInput from "./components/ProgressiveInput";
 import { useRecording } from "./hooks/useRecording";
 import { useRecordingHistory } from "./hooks/useRecordingHistory";
-import { ChartBarIcon } from "./components/Icons";
 
 function App() {
   // UI State
@@ -72,6 +70,9 @@ function App() {
               onStopRecording={stopRecording}
               audioLevel={audioLevel}
               statusText={statusText}
+              transcript={transcript}
+              recordingDuration={recordingDuration}
+              wordCount={wordCount}
             />
           ) : (
             /* Feedback View */
@@ -83,25 +84,6 @@ function App() {
                 <FeedbackReport feedback={feedback} />
               </div>
             </main>
-          )}
-
-          {/* Live Transcript - Show during recording */}
-          {isRecording && transcript && (
-            <div className="live-transcript-overlay">
-              <TranscriptDisplay transcript={transcript} />
-              <div className="live-stats">
-                <div className="stat">
-                  <ChartBarIcon size={16} />
-                  <span>{Math.floor(recordingDuration / 60)}:{(recordingDuration % 60).toString().padStart(2, '0')}</span>
-                </div>
-                <div className="stat">
-                  <span>{wordCount} words</span>
-                </div>
-                <div className="stat">
-                  <span>{recordingDuration > 0 ? Math.round((wordCount / recordingDuration) * 60) : 0} WPM</span>
-                </div>
-              </div>
-            </div>
           )}
         </div>
       </div>
