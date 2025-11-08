@@ -11,6 +11,7 @@ import FeedbackPage from "./pages/FeedbackPage";
 import AccountPage from "./pages/AccountPage";
 import RecordingsPage from "./pages/RecordingsPage";
 import SettingsPage from "./pages/SettingsPage";
+import ProgressPage from "./pages/ProgressPage";
 import Auth from "./pages/Auth";
 import ProtectedRoute from "./components/ProtectedRoute";
 import { AuthProvider } from "./contexts/AuthContext";
@@ -52,6 +53,14 @@ createRoot(document.getElementById("root")).render(
             element={
               <ProtectedRoute>
                 <RecordingsPage />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/progress"
+            element={
+              <ProtectedRoute>
+                <ProgressPage />
               </ProtectedRoute>
             }
           />

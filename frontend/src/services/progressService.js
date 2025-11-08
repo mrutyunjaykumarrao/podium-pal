@@ -210,6 +210,10 @@ export const getUserProgressSnapshots = async (
   }
 };
 
+// Alias for backward compatibility
+export const getProgressSnapshots = getUserProgressSnapshots;
+
+
 /**
  * Calculate and create weekly progress snapshot
  * @param {string} userId - User ID
@@ -240,4 +244,73 @@ export const createMonthlySnapshot = async (userId) => {
     monthAgo,
     now
   );
+};
+
+/**
+ * Calculate progress trends from snapshots
+ * @param {Array} snapshots - Array of progress snapshots
+ * @returns {object} - Trends object with insights
+ */
+export const getProgressTrends = (snapshots) => {
+  if (!snapshots || snapshots.length === 0) {
+    return {
+      currentStreak: 0,
+      scoreImprovement: 0,
+      bestScore: 0,
+      mostActiveDay: 'N/A',
+    };
+  }
+
+  // Calculate best score
+  const bestScore = Math.max(
+    ...snapshots.map(s => s.averageScore || s.avg_overall_score || 0)
+  );
+
+  // Calculate score improvement (compare first and last)
+  const latestScore = snapshots[0]?.averageScore || snapshots[0]?.avg_overall_score || 0;
+  const oldestScore = snapshots[snapshots.length - 1]?.averageScore || 
+                      snapshots[snapshots.length - 1]?.avg_overall_score || 0;
+  const scoreImprovement = oldestScore > 0 
+    ? ((latestScore - oldestScore) / oldestScore) * 100 
+    : 0;
+
+  // Calculate current streak (consecutive days with recordings)
+  let currentStreak = 0;
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+  
+  for (let i = 0; i < snapshots.length; i++) {
+    const snapshotDate = snapshots[i].timestamp?.toDate() || 
+                         snapshots[i].period_end || 
+                         new Date(0);
+    snapshotDate.setHours(0, 0, 0, 0);
+    
+    const daysDiff = Math.floor((today - snapshotDate) / (1000 * 60 * 60 * 24));
+    
+    if (daysDiff === i) {
+      currentStreak++;
+    } else {
+      break;
+    }
+  }
+
+  // Calculate most active day of week
+  const dayCount = [0, 0, 0, 0, 0, 0, 0]; // Sun-Sat
+  snapshots.forEach(snapshot => {
+    const date = snapshot.timestamp?.toDate() || 
+                 snapshot.period_end || 
+                 new Date();
+    dayCount[date.getDay()]++;
+  });
+  
+  const maxDayIndex = dayCount.indexOf(Math.max(...dayCount));
+  const daysOfWeek = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+  const mostActiveDay = daysOfWeek[maxDayIndex];
+
+  return {
+    currentStreak,
+    scoreImprovement,
+    bestScore,
+    mostActiveDay,
+  };
 };

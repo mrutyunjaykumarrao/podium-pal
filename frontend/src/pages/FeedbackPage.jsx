@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import FeedbackReport from "../components/FeedbackReport";
+import NavMenu from "../components/NavMenu";
 import { useAuth } from "../contexts/AuthContext";
 import { saveRecording } from "../services/recordingsService";
 
@@ -143,6 +144,7 @@ function FeedbackPage() {
 
   return (
     <div style={{ padding: 20 }}>
+      <NavMenu />
       <h1>Feedback for session: {id}</h1>
       <FeedbackReport data={data} />
     </div>
