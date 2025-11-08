@@ -1,0 +1,33 @@
+{
+  "sessionId": "b5ce9d1a-b300-4578-ad2f-eb78763b851a",
+  "timestamp": "2025-11-08T17:59:59.345127",
+  "transcript": "hello hello like I am going to say that it is like translate",
+  "userGoal": "adfdsf",
+  "duration": 27,
+  "audioPath": null,
+  "feedback": {
+    "sessionId": "b5ce9d1a-b300-4578-ad2f-eb78763b851a",
+    "pace": 28,
+    "fillerWords": {
+      "like": 2
+    },
+    "aiSummary": "The speaker vaguely mentions an intention to translate something, but the speech is too short and lacks context to understand the message fully.",
+    "clarityScore": 20,
+    "confidenceScore": 30,
+    "engagementScore": 10,
+    "structureScore": 10,
+    "overall_score": 1.5,
+    "constructiveTip": "Focus on expanding your ideas and providing more context for your audience to understand the purpose of your message. Practice speaking slower and with intention, minimizing filler words and focusing on conveying a clear and concise message from beginning to end.",
+    "strengths": [
+      "Speaker initiated a speech, showing willingness to communicate.",
+      "The speech started with a greeting.",
+      "Speaker has identified translation as a potential topic."
+    ],
+    "improvements": [
+      "Develop a clear and concise message with a specific purpose.",
+      "Eliminate filler words like 'like' to enhance clarity.",
+      "Increase speaking pace to a more appropriate level (140-160 WPM).",
+      "Structure the speech with a clear beginning, middle, and end."
+    ]
+  }
+}

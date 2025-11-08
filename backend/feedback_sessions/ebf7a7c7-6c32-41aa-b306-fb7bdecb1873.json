@@ -1,0 +1,29 @@
+{
+  "sessionId": "ebf7a7c7-6c32-41aa-b306-fb7bdecb1873",
+  "timestamp": "2025-11-08T17:58:39.075905",
+  "transcript": "hello hello my name is how are you coming can you please formated water bottle",
+  "userGoal": "hjhghj",
+  "duration": 14,
+  "audioPath": "audio_recordings\\recording_20251108_175836.webm",
+  "feedback": {
+    "sessionId": "ebf7a7c7-6c32-41aa-b306-fb7bdecb1873",
+    "pace": 64,
+    "fillerWords": {},
+    "aiSummary": "The speaker's message is unclear, possibly a greeting and a request related to a water bottle.",
+    "clarityScore": 35,
+    "confidenceScore": 50,
+    "engagementScore": 25,
+    "structureScore": 30,
+    "overall_score": 3.5,
+    "constructiveTip": "Focus on forming complete, understandable sentences. Before speaking, take a moment to gather your thoughts and determine the core message you want to convey. Practice speaking slowly and deliberately to improve clarity.",
+    "strengths": [
+      "Attempted a greeting",
+      "Made a request"
+    ],
+    "improvements": [
+      "Formulate complete sentences",
+      "Increase speaking pace closer to the ideal range",
+      "Define a clear purpose before speaking"
+    ]
+  }
+}

@@ -1,0 +1,29 @@
+{
+  "sessionId": "d0dfcd92-9a28-4176-8c0f-2691fe89488f",
+  "timestamp": "2025-11-08T17:58:41.816042",
+  "transcript": "hello hello my name is how are you coming can you please formated water bottle",
+  "userGoal": "hjhghj",
+  "duration": 16,
+  "audioPath": null,
+  "feedback": {
+    "sessionId": "d0dfcd92-9a28-4176-8c0f-2691fe89488f",
+    "pace": 56,
+    "fillerWords": {},
+    "aiSummary": "The speaker offered a brief and unclear greeting, followed by a question and an incomplete request about a water bottle.",
+    "clarityScore": 30,
+    "confidenceScore": 50,
+    "engagementScore": 20,
+    "structureScore": 20,
+    "overall_score": 2.5,
+    "constructiveTip": "Focus on clearly articulating your intended message in a structured manner. Practice speaking slower and avoid rushing to ensure your audience can understand you and your purpose.",
+    "strengths": [
+      "Initiating contact with \"hello\"",
+      "Attempting to engage the audience with a question"
+    ],
+    "improvements": [
+      "Formulate complete and coherent sentences.",
+      "Increase speaking pace to an ideal range of 140-160 WPM by adding more content.",
+      "Define the purpose of the speech before speaking and organize the content."
+    ]
+  }
+}
