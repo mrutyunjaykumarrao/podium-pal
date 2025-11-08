@@ -261,8 +261,8 @@ def get_llm_feedback(transcript: str, user_goal: str, audio_path: Optional[Path]
         }
     
     try:
-        # Initialize Gemini model
-        model = genai.GenerativeModel('gemini-pro')
+        # Initialize Gemini model (using gemini-2.0-flash - fast and efficient)
+        model = genai.GenerativeModel('gemini-2.0-flash')
         
         # Word count for context
         word_count = len(transcript.split())
