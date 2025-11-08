@@ -1,0 +1,200 @@
+/* Settings Page Styles - Meditative Theme */
+
+.settings-page {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #f8faf9 0%, #eef5f2 100%);
+  padding: 40px 20px;
+  overflow-y: auto;
+}
+
+.settings-container {
+  max-width: 800px;
+  margin: 0 auto;
+  padding-top: 40px;
+}
+
+.settings-header {
+  text-align: center;
+  margin-bottom: 40px;
+}
+
+.settings-header h1 {
+  font-family: 'Crimson Text', serif;
+  font-size: 2.5rem;
+  color: #2d3748;
+  margin: 0 0 12px 0;
+  font-weight: 600;
+}
+
+.settings-header p {
+  font-family: 'Lato', sans-serif;
+  font-size: 1.1rem;
+  color: #718096;
+  margin: 0;
+}
+
+.settings-card {
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(10px);
+  border-radius: 20px;
+  padding: 40px;
+  box-shadow: 0 8px 32px rgba(143, 185, 168, 0.15);
+  border: 1px solid rgba(143, 185, 168, 0.2);
+}
+
+.settings-section {
+  margin-bottom: 40px;
+  padding-bottom: 32px;
+  border-bottom: 1px solid rgba(143, 185, 168, 0.15);
+}
+
+.settings-section:last-of-type {
+  border-bottom: none;
+}
+
+.settings-section h2 {
+  font-family: 'Crimson Text', serif;
+  font-size: 1.6rem;
+  color: #8fb9a8;
+  margin: 0 0 24px 0;
+}
+
+.setting-item {
+  margin-bottom: 20px;
+}
+
+.setting-item:last-child {
+  margin-bottom: 0;
+}
+
+.setting-item label {
+  display: block;
+  font-family: 'Lato', sans-serif;
+  font-size: 0.95rem;
+  color: #2d3748;
+  font-weight: 600;
+  margin-bottom: 8px;
+}
+
+.setting-item select {
+  width: 100%;
+  padding: 12px 16px;
+  border: 2px solid rgba(143, 185, 168, 0.2);
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.8);
+  color: #2d3748;
+  font-family: 'Lato', sans-serif;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.setting-item select:hover {
+  border-color: rgba(143, 185, 168, 0.4);
+}
+
+.setting-item select:focus {
+  outline: none;
+  border-color: #8fb9a8;
+  box-shadow: 0 0 0 3px rgba(143, 185, 168, 0.1);
+}
+
+.checkbox-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px;
+  border-radius: 10px;
+  background: linear-gradient(135deg, rgba(143, 185, 168, 0.05), rgba(168, 197, 209, 0.05));
+  transition: all 0.2s ease;
+}
+
+.checkbox-item:hover {
+  background: linear-gradient(135deg, rgba(143, 185, 168, 0.1), rgba(168, 197, 209, 0.1));
+}
+
+.checkbox-item input[type="checkbox"] {
+  width: 20px;
+  height: 20px;
+  cursor: pointer;
+  accent-color: #8fb9a8;
+}
+
+.checkbox-item label {
+  margin: 0;
+  cursor: pointer;
+  flex: 1;
+}
+
+.settings-actions {
+  display: flex;
+  gap: 16px;
+  margin-top: 40px;
+  padding-top: 32px;
+  border-top: 2px solid rgba(143, 185, 168, 0.15);
+}
+
+.save-btn,
+.reset-btn {
+  flex: 1;
+  padding: 16px 32px;
+  border: none;
+  border-radius: 12px;
+  font-family: 'Lato', sans-serif;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.save-btn {
+  background: linear-gradient(135deg, #8fb9a8, #a8c5d1);
+  color: white;
+}
+
+.save-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(143, 185, 168, 0.3);
+}
+
+.reset-btn {
+  background: linear-gradient(135deg, rgba(143, 185, 168, 0.15), rgba(168, 197, 209, 0.15));
+  color: #718096;
+}
+
+.reset-btn:hover {
+  background: linear-gradient(135deg, rgba(143, 185, 168, 0.25), rgba(168, 197, 209, 0.25));
+  color: #2d3748;
+}
+
+.save-btn:active,
+.reset-btn:active {
+  transform: translateY(0);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .settings-page {
+    padding: 20px 16px;
+  }
+
+  .settings-container {
+    padding-top: 20px;
+  }
+
+  .settings-header h1 {
+    font-size: 2rem;
+  }
+
+  .settings-card {
+    padding: 24px;
+  }
+
+  .settings-section h2 {
+    font-size: 1.4rem;
+  }
+
+  .settings-actions {
+    flex-direction: column;
+  }
+}

@@ -1,0 +1,30 @@
+{
+  "sessionId": "b71a121c-b42f-43e4-8cbf-fda763dbc837",
+  "timestamp": "2025-11-09T00:28:50.403022",
+  "transcript": "Hello, how are you? I'm fine, thank you.",
+  "userGoal": "hjrbvnfdkfjm",
+  "duration": 15,
+  "audioPath": null,
+  "feedback": {
+    "sessionId": "b71a121c-b42f-43e4-8cbf-fda763dbc837",
+    "pace": 32,
+    "fillerWords": {},
+    "aiSummary": "The speaker provided a basic greeting and responded to a hypothetical question about their well-being.",
+    "clarityScore": 70,
+    "confidenceScore": 75,
+    "engagementScore": 20,
+    "structureScore": 80,
+    "overall_score": 4.5,
+    "constructiveTip": "To improve, try expanding your responses beyond basic greetings. Add more substance to your speech by including details, anecdotes, or opinions to make it more engaging for listeners.",
+    "strengths": [
+      "Clear pronunciation",
+      "Direct and concise language",
+      "Polite greeting"
+    ],
+    "improvements": [
+      "Lack of engaging content",
+      "Very short length; needs more substance",
+      "Absence of a clear purpose or goal"
+    ]
+  }
+}

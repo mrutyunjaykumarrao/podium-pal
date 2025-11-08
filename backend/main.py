@@ -170,6 +170,7 @@ async def analyze_speech(request: Request):
             body = await request.json()
             transcript = body.get('transcript')
             userGoal = body.get('userGoal') or body.get('user_goal')
+            aiPersonality = body.get('aiPersonality', 'supportive')
             duration = int(body.get('duration', 0) or 0)
         else:
             # Assume multipart/form-data (form + optional file)
@@ -177,6 +178,7 @@ async def analyze_speech(request: Request):
             form = await request.form()
             transcript = form.get('transcript')
             userGoal = form.get('userGoal') or form.get('user_goal')
+            aiPersonality = form.get('aiPersonality', 'supportive')
             duration = int(form.get('duration', 0) or 0)
             audio = form.get('audio') if 'audio' in form else None
             if audio and hasattr(audio, 'filename') and audio.filename:
@@ -194,13 +196,14 @@ async def analyze_speech(request: Request):
         print(f"Transcript length: {len(transcript) if transcript else 0} chars")
         print(f"Transcript preview: {(transcript or '')[:100]}...")
         print(f"UserGoal: {userGoal}")
+        print(f"AI Personality: {aiPersonality}")
         print(f"Duration: {duration} seconds")
         # Calculate metrics and request LLM feedback
         print("-> Calculating metrics...")
         metrics = calculate_metrics(transcript or '', duration)
 
         print("-> Requesting LLM feedback...")
-        llm_feedback = get_llm_feedback(transcript or '', userGoal or '', audio_path, duration)
+        llm_feedback = get_llm_feedback(transcript or '', userGoal or '', audio_path, duration, aiPersonality)
         
         # Combine results into response
         response = AnalyzeResponse(
@@ -269,6 +272,43 @@ async def get_feedback(session_id: str):
         raise HTTPException(status_code=500, detail=f"Failed to retrieve feedback: {e}")
 
 
+@app.get("/recordings")
+async def get_all_recordings():
+    """Get list of all recordings with their metadata"""
+    try:
+        print("GET /recordings requested")
+        recordings = []
+        
+        # Iterate through all feedback session files
+        for session_file in FEEDBACK_STORAGE_DIR.glob("*.json"):
+            try:
+                with open(session_file, "r", encoding="utf-8") as f:
+                    session_data = json.load(f)
+                
+                feedback = session_data.get("feedback", {})
+                
+                # Extract key info for the recordings list
+                recording_info = {
+                    "session_id": session_file.stem,
+                    "timestamp": session_data.get("timestamp", ""),
+                    "goal": feedback.get("goal", "General Speech"),
+                    "overall_score": feedback.get("overall_score", "N/A"),
+                    "ai_personality": feedback.get("ai_personality", "N/A"),
+                    "transcript_preview": feedback.get("transcript", "")[:100] + "..." if feedback.get("transcript") else ""
+                }
+                recordings.append(recording_info)
+            except Exception as e:
+                print(f"Error reading session {session_file.name}: {e}")
+                continue
+        
+        print(f"-> Returning {len(recordings)} recordings")
+        return recordings
+    
+    except Exception as e:
+        print(f"❌ Error retrieving recordings: {e}")
+        raise HTTPException(status_code=500, detail=f"Failed to retrieve recordings: {e}")
+
+
 # ========================================
 # Analysis Functions
 # ========================================
@@ -322,7 +362,7 @@ def calculate_metrics(transcript: str, duration: int = 0) -> Dict:
     }
 
 
-def get_llm_feedback(transcript: str, user_goal: str, audio_path: Optional[Path] = None, duration: int = 0) -> Dict:
+def get_llm_feedback(transcript: str, user_goal: str, audio_path: Optional[Path] = None, duration: int = 0, ai_personality: str = "supportive") -> Dict:
     """
     Get AI-powered feedback using Gemini LLM API
     
@@ -331,6 +371,7 @@ def get_llm_feedback(transcript: str, user_goal: str, audio_path: Optional[Path]
         user_goal: The user's intended message
         audio_path: Optional path to the audio file for tone/pace analysis
         duration: Recording duration in seconds
+        ai_personality: The feedback style (supportive, direct, critical, humorous, mentor, professional)
         
     Returns:
         Dictionary with summary, clarity score, and constructive tip
@@ -372,8 +413,54 @@ def get_llm_feedback(transcript: str, user_goal: str, audio_path: Optional[Path]
         if duration > 0:
             duration_context = f"\n**SPEECH METRICS:**\n- Duration: {duration} seconds ({duration_minutes:.1f} minutes)\n- Word count: {word_count}\n- Speaking pace: {actual_wpm} WPM (ideal: 140-160 WPM)"
         
+        # Personality customization
+        personality_styles = {
+            "supportive": {
+                "tone": "encouraging and nurturing",
+                "approach": "Focus on positive reinforcement and gentle guidance. Celebrate strengths enthusiastically and frame improvements as opportunities for growth.",
+                "example": "Be warm, use phrases like 'Great job on...', 'You're making wonderful progress...', 'Consider trying...'"
+            },
+            "direct": {
+                "tone": "straightforward and concise",
+                "approach": "Get straight to the point. Be clear and efficient with feedback. No fluff, just facts and actionable items.",
+                "example": "Use bullet points, be brief, focus on specific actions: 'Do this', 'Avoid that', 'Change X to Y'"
+            },
+            "critical": {
+                "tone": "analytical and detailed",
+                "approach": "Provide thorough, in-depth analysis. Point out subtle issues and areas for improvement with precise observations.",
+                "example": "Be specific about what could be better, analyze patterns, provide detailed reasoning for each score"
+            },
+            "humorous": {
+                "tone": "light-hearted and fun",
+                "approach": "Keep it fun and engaging. Use wit and gentle humor to make feedback memorable and enjoyable. Still be helpful!",
+                "example": "Use playful language, clever metaphors, keep it upbeat while still being useful"
+            },
+            "mentor": {
+                "tone": "wise and reflective",
+                "approach": "Share insights like a seasoned coach. Use wisdom from experience, ask thought-provoking questions, guide self-discovery.",
+                "example": "Use phrases like 'Consider...', 'Reflect on...', 'In my experience...', 'What if you tried...'"
+            },
+            "professional": {
+                "tone": "formal and structured",
+                "approach": "Maintain business formality. Use professional language, systematic analysis, and corporate communication style.",
+                "example": "Use formal language, structured feedback, professional terminology, organized sections"
+            }
+        }
+        
+        personality_config = personality_styles.get(ai_personality, personality_styles["supportive"])
+        personality_instruction = f"""
+**FEEDBACK PERSONALITY: {ai_personality.upper()}**
+- Tone: {personality_config['tone']}
+- Approach: {personality_config['approach']}
+- Style: {personality_config['example']}
+
+IMPORTANT: Maintain this personality consistently throughout ALL your feedback (summary, strengths, improvements, and constructive tip).
+"""
+        
         # Construct comprehensive prompt
         prompt = f"""You are an expert public speaking coach analyzing a speech recording. Your goal is to provide constructive, actionable feedback to help the speaker improve.
+
+{personality_instruction}
 
 **SPEAKER'S GOAL:** {user_goal}
 
