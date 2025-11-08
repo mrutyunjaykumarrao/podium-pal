@@ -9,10 +9,21 @@ from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel, Field
 from typing import Dict
 import os
+import json
+import google.generativeai as genai
 from dotenv import load_dotenv
 
 # Load environment variables
 load_dotenv()
+
+# Configure the Gemini API
+try:
+    genai.configure(api_key=os.environ["GEMINI_API_KEY"])
+    model = genai.GenerativeModel('gemini-pro')
+    print("✓ Gemini API configured successfully")
+except Exception as e:
+    print(f"✗ Error configuring Gemini API: {e}")
+    model = None
 
 # Initialize FastAPI app
 app = FastAPI(
@@ -106,11 +117,18 @@ async def analyze_speech(request: AnalyzeRequest):
         transcript = request.transcript
         user_goal = request.userGoal
         
+        print(f"=== ANALYSIS REQUEST ===")
+        print(f"Goal: {user_goal}")
+        print(f"Transcript: {transcript[:100]}..." if len(transcript) > 100 else f"Transcript: {transcript}")
+        
         # Calculate basic metrics (pace, filler words)
         metrics = calculate_metrics(transcript)
+        print(f"Metrics calculated: {metrics}")
         
         # Get AI-powered feedback (summary, clarity score, tip)
+        # This function is synchronous, so we don't need to await it
         llm_feedback = get_llm_feedback(transcript, user_goal)
+        print(f"LLM Feedback received: {llm_feedback}")
         
         # Combine results into response
         response = AnalyzeResponse(
@@ -121,9 +139,13 @@ async def analyze_speech(request: AnalyzeRequest):
             constructiveTip=llm_feedback["tip"]
         )
         
+        print(f"Response prepared successfully")
         return response
         
     except Exception as e:
+        print(f"ERROR in analysis: {e}")
+        import traceback
+        traceback.print_exc()
         raise HTTPException(status_code=500, detail=f"Analysis failed: {str(e)}")
 
 
@@ -176,7 +198,7 @@ def calculate_metrics(transcript: str) -> Dict:
 
 def get_llm_feedback(transcript: str, user_goal: str) -> Dict:
     """
-    Get AI-powered feedback using LLM API
+    Get AI-powered feedback using Gemini LLM API
     
     Args:
         transcript: The speech text
@@ -185,40 +207,81 @@ def get_llm_feedback(transcript: str, user_goal: str) -> Dict:
     Returns:
         Dictionary with summary, clarity score, and constructive tip
     """
-    # TODO: Implement actual LLM integration
-    # This is where you'll call the Gemini API
-    
-    # For now, return placeholder values
-    # In Phase 2, this will be replaced with actual LLM calls
-    
-    # Placeholder implementation
-    return {
-        "summary": f"The speaker discussed their intended goal: {user_goal}",
-        "clarityScore": 85,
-        "tip": "Great start! To improve clarity, try to structure your speech with a clear beginning, middle, and end."
-    }
-    
-    # TODO: Actual implementation will look like:
-    # import google.generativeai as genai
-    # genai.configure(api_key=os.getenv("GEMINI_API_KEY"))
-    # model = genai.GenerativeModel('gemini-pro')
-    # 
-    # prompt = f"""
-    # Analyze this speech transcript and provide feedback.
-    # 
-    # User's Goal: {user_goal}
-    # Transcript: {transcript}
-    # 
-    # Provide:
-    # 1. A one-sentence summary of what the speaker said
-    # 2. A clarity score (0-100) on how well they achieved their goal
-    # 3. One specific, constructive tip to improve
-    # 
-    # Return as JSON with keys: summary, clarityScore, tip
-    # """
-    # 
-    # response = model.generate_content(prompt)
-    # Parse and return the structured response
+    if not model:
+        # Fallback if the model failed to initialize
+        return {
+            "summary": "LLM model not configured.",
+            "clarityScore": 0,
+            "tip": "Could not connect to the AI model. Please check the backend server and API key."
+        }
+
+    # This is the prompt that instructs the AI.
+    # Telling it to return a JSON object is the key to reliable parsing.
+    prompt = f"""
+    You are an expert public speaking coach. Analyze the following speech transcript and the user's stated goal.
+
+    **User's Stated Goal:** "{user_goal}"
+    **Speech Transcript:** "{transcript}"
+
+    Based on the above, perform the following tasks:
+    1.  Provide a one-sentence summary of what the speech was actually about.
+    2.  On a scale of 1-100, provide a "Clarity Score" that rates how well the transcript's main point matches the user's stated goal. A high score means the message was delivered very clearly.
+    3.  Provide a single, brief, and constructive tip for improvement.
+
+    Return your analysis as a single, minified JSON object with the following keys: "aiSummary", "clarityScore", "constructiveTip". Do not include any other text, explanations, or markdown formatting.
+    """
+
+    try:
+        # Use synchronous method instead of async
+        response = model.generate_content(prompt)
+        
+        # Clean up the response to ensure it's valid JSON
+        # LLMs sometimes wrap their response in ```json ... ```
+        cleaned_response = response.text.strip().replace("```json", "").replace("```", "").strip()
+        
+        print(f"DEBUG: LLM Response: {cleaned_response}")
+        
+        # Parse the JSON string into a Python dictionary
+        feedback_data = json.loads(cleaned_response)
+
+        # Validate that the score is an integer
+        if "clarityScore" in feedback_data:
+            clarity_score = feedback_data["clarityScore"]
+            # Convert to int if it's a string or float
+            if isinstance(clarity_score, str):
+                clarity_score = int(clarity_score)
+            elif isinstance(clarity_score, float):
+                clarity_score = int(clarity_score)
+            
+            return {
+                "summary": feedback_data.get("aiSummary", "No summary available"),
+                "clarityScore": clarity_score,
+                "tip": feedback_data.get("constructiveTip", "No tip available")
+            }
+        else:
+            # Handle cases where the score might not be present
+            return {
+                "summary": feedback_data.get("aiSummary", "No summary available"),
+                "clarityScore": 75,
+                "tip": feedback_data.get("constructiveTip", "Great speech! Keep practicing.")
+            }
+
+    except json.JSONDecodeError as e:
+        print(f"Error parsing JSON from LLM response: {e}")
+        # Return a structured error if the API fails or returns malformed data
+        return {
+            "summary": "Error analyzing transcript.",
+            "clarityScore": 0,
+            "tip": f"The AI model returned an invalid JSON response. Error: {str(e)}"
+        }
+    except Exception as e:
+        print(f"Error getting LLM feedback: {e}")
+        # Return a structured error if the API fails or returns malformed data
+        return {
+            "summary": "Error analyzing transcript.",
+            "clarityScore": 0,
+            "tip": f"The AI model encountered an error. Error: {str(e)}"
+        }
 
 
 # ========================================
