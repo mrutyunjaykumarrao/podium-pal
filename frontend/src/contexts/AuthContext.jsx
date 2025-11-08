@@ -1,12 +1,9 @@
-// AuthContext - Global Authentication State Management
+// AuthContext - Google-Only Authentication State Management
 import { createContext, useContext, useEffect, useState } from 'react';
 import {
-  createUserWithEmailAndPassword,
-  signInWithEmailAndPassword,
   signOut,
   onAuthStateChanged,
   signInWithPopup,
-  updateProfile,
 } from 'firebase/auth';
 import { doc, setDoc, getDoc, serverTimestamp } from 'firebase/firestore';
 import { auth, db, googleProvider } from '../firebase';
@@ -42,7 +39,7 @@ export const AuthProvider = ({ children }) => {
 
         await setDoc(userRef, {
           email,
-          displayName: displayName || additionalData.displayName || 'User',
+          displayName: displayName || 'User',
           photoURL: photoURL || null,
           createdAt,
           totalRecordings: 0,
@@ -60,44 +57,7 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
-  // Sign up with email and password
-  const signup = async (email, password, displayName) => {
-    console.log('[Auth] Signing up user:', email);
-    try {
-      const result = await createUserWithEmailAndPassword(auth, email, password);
-      
-      // Update display name
-      if (displayName) {
-        await updateProfile(result.user, { displayName });
-      }
-      
-      // Create Firestore document
-      await createUserDocument(result.user, { displayName });
-      
-      console.log('[Auth] ✓ Sign up successful');
-      return result.user;
-    } catch (error) {
-      console.error('[Auth] ❌ Sign up error:', error);
-      setError(error.message);
-      throw error;
-    }
-  };
-
-  // Sign in with email and password
-  const login = async (email, password) => {
-    console.log('[Auth] Logging in user:', email);
-    try {
-      const result = await signInWithEmailAndPassword(auth, email, password);
-      console.log('[Auth] ✓ Login successful');
-      return result.user;
-    } catch (error) {
-      console.error('[Auth] ❌ Login error:', error);
-      setError(error.message);
-      throw error;
-    }
-  };
-
-  // Sign in with Google
+  // Sign in with Google (Only authentication method)
   const signInWithGoogle = async () => {
     console.log('[Auth] Signing in with Google');
     try {
@@ -125,7 +85,7 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
-  // Listen for auth state changes
+  // Listen for auth state changes (handles session persistence automatically)
   useEffect(() => {
     console.log('[Auth] Setting up auth state listener');
     const unsubscribe = onAuthStateChanged(auth, async (user) => {
@@ -146,8 +106,6 @@ export const AuthProvider = ({ children }) => {
     currentUser,
     loading,
     error,
-    signup,
-    login,
     logout,
     signInWithGoogle,
   };
