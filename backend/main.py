@@ -88,7 +88,13 @@ class AnalyzeResponse(BaseModel):
     fillerWords: Dict[str, int] = Field(..., description="Dictionary of filler words and their counts")
     aiSummary: str = Field(..., description="AI-generated summary of the speech")
     clarityScore: int = Field(..., ge=0, le=100, description="Clarity score from 0-100")
+    confidenceScore: int = Field(..., ge=0, le=100, description="Confidence/assertiveness score from 0-100")
+    engagementScore: int = Field(..., ge=0, le=100, description="Audience engagement score from 0-100")
+    structureScore: int = Field(..., ge=0, le=100, description="Speech structure/organization score from 0-100")
+    overall_score: float = Field(..., ge=0, le=10, description="Overall speech score from 0-10")
     constructiveTip: str = Field(..., description="Constructive feedback for improvement")
+    strengths: list[str] = Field(..., description="List of key strengths in the speech")
+    improvements: list[str] = Field(..., description="List of specific areas to improve")
 
     class Config:
         json_schema_extra = {
@@ -101,7 +107,13 @@ class AnalyzeResponse(BaseModel):
                 },
                 "aiSummary": "The speaker announced that the quarterly results were positive.",
                 "clarityScore": 92,
-                "constructiveTip": "Great job on the directness! To sound even more confident, try removing introductory phrases like 'so basically' and just start with the main point."
+                "confidenceScore": 85,
+                "engagementScore": 78,
+                "structureScore": 88,
+                "overall_score": 8.6,
+                "constructiveTip": "Great job on the directness! To sound even more confident, try removing introductory phrases like 'so basically' and just start with the main point.",
+                "strengths": ["Clear main message", "Good pacing", "Professional tone"],
+                "improvements": ["Reduce filler words", "Add more specific examples", "Stronger opening"]
             }
         }
 
@@ -126,6 +138,7 @@ async def root():
 async def analyze_speech(
     transcript: str = Form(...),
     userGoal: str = Form(...),
+    duration: int = Form(0),  # Duration in seconds
     audio: UploadFile = File(None)
 ):
     """
@@ -134,6 +147,7 @@ async def analyze_speech(
     Args:
         transcript: The speech text (form field)
         userGoal: The user's intended message (form field)
+        duration: Recording duration in seconds (form field)
         audio: Optional audio file of the speech (multipart/form-data)
         
     Returns:
@@ -144,6 +158,7 @@ async def analyze_speech(
         print(f"Transcript length: {len(transcript)} chars")
         print(f"Transcript preview: {transcript[:100]}...")
         print(f"UserGoal: {userGoal}")
+        print(f"Duration: {duration} seconds")
         print(f"Audio file: {audio.filename if audio and hasattr(audio, 'filename') and audio.filename else 'None'}")
         
         # Validate inputs
@@ -170,11 +185,11 @@ async def analyze_speech(
             print(f"Audio size: {audio_path.stat().st_size} bytes")
         
         # Calculate basic metrics (pace, filler words) from transcript
-        metrics = calculate_metrics(transcript)
+        metrics = calculate_metrics(transcript, duration)
         
         # Get AI-powered feedback (summary, clarity score, tip)
         # Pass audio_path to LLM function for future audio analysis
-        llm_feedback = get_llm_feedback(transcript, userGoal, audio_path)
+        llm_feedback = get_llm_feedback(transcript, userGoal, audio_path, duration)
         
         # Combine results into response
         response = AnalyzeResponse(
@@ -182,7 +197,13 @@ async def analyze_speech(
             fillerWords=metrics["fillerWords"],
             aiSummary=llm_feedback["summary"],
             clarityScore=llm_feedback["clarityScore"],
-            constructiveTip=llm_feedback["tip"]
+            confidenceScore=llm_feedback["confidenceScore"],
+            engagementScore=llm_feedback["engagementScore"],
+            structureScore=llm_feedback["structureScore"],
+            overall_score=llm_feedback["overall_score"],
+            constructiveTip=llm_feedback["tip"],
+            strengths=llm_feedback["strengths"],
+            improvements=llm_feedback["improvements"]
         )
         
         return response
@@ -195,27 +216,31 @@ async def analyze_speech(
 # Analysis Functions
 # ========================================
 
-def calculate_metrics(transcript: str) -> Dict:
+def calculate_metrics(transcript: str, duration: int = 0) -> Dict:
     """
     Calculate basic speech metrics from transcript
     
     Args:
         transcript: The speech text
+        duration: Recording duration in seconds (0 if not provided)
         
     Returns:
         Dictionary with pace and filler words
     """
-    # TODO: Implement actual calculation logic
-    # For now, return placeholder values
-    
     # Count words for pace calculation
     words = transcript.split()
     word_count = len(words)
     
-    # Assume average speaking time (this is a placeholder)
-    # In production, you'd need actual timing data
-    estimated_minutes = word_count / 150  # Rough estimate
-    pace = int(word_count / max(estimated_minutes, 0.5))  # Avoid division by zero
+    # Calculate actual WPM if duration is provided
+    if duration > 0:
+        minutes = duration / 60.0
+        pace = int(word_count / minutes) if minutes > 0 else 0
+        print(f"✓ Calculating WPM: {word_count} words / {minutes:.2f} minutes = {pace} WPM")
+    else:
+        # Fallback: estimate based on average speaking pace
+        estimated_minutes = word_count / 150  # Rough estimate
+        pace = int(word_count / max(estimated_minutes, 0.5))  # Avoid division by zero
+        print(f"⚠ Duration not provided, using estimated pace: {pace} WPM")
     
     # Common filler words to detect
     filler_word_list = [
@@ -232,13 +257,15 @@ def calculate_metrics(transcript: str) -> Dict:
         if count > 0:
             filler_words[filler] = count
     
+    print(f"✓ Metrics calculated: {word_count} words, {pace} WPM, {len(filler_words)} filler types")
+    
     return {
         "pace": pace,
         "fillerWords": filler_words
     }
 
 
-def get_llm_feedback(transcript: str, user_goal: str, audio_path: Optional[Path] = None) -> Dict:
+def get_llm_feedback(transcript: str, user_goal: str, audio_path: Optional[Path] = None, duration: int = 0) -> Dict:
     """
     Get AI-powered feedback using Gemini LLM API
     
@@ -246,6 +273,7 @@ def get_llm_feedback(transcript: str, user_goal: str, audio_path: Optional[Path]
         transcript: The speech text
         user_goal: The user's intended message
         audio_path: Optional path to the audio file for tone/pace analysis
+        duration: Recording duration in seconds
         
     Returns:
         Dictionary with summary, clarity score, and constructive tip
@@ -257,15 +285,23 @@ def get_llm_feedback(transcript: str, user_goal: str, audio_path: Optional[Path]
         return {
             "summary": f"The speaker discussed their intended goal: {user_goal}",
             "clarityScore": 75,
-            "tip": "Configure GEMINI_API_KEY in .env file to get AI-powered feedback!"
+            "confidenceScore": 70,
+            "engagementScore": 65,
+            "structureScore": 70,
+            "overall_score": 7.0,
+            "tip": "Configure GEMINI_API_KEY in .env file to get AI-powered feedback!",
+            "strengths": ["Speech recorded successfully", "Basic structure present", "Clear intention"],
+            "improvements": ["AI analysis unavailable", "Please configure GEMINI_API_KEY", "Enable full feedback system"]
         }
     
     try:
         # Initialize Gemini model (using gemini-2.0-flash - fast and efficient)
         model = genai.GenerativeModel('gemini-2.0-flash')
         
-        # Word count for context
+        # Word count and duration for context
         word_count = len(transcript.split())
+        duration_minutes = duration / 60.0 if duration > 0 else 0
+        actual_wpm = int(word_count / duration_minutes) if duration_minutes > 0 else 0
         
         # Audio context note
         audio_note = ""
@@ -274,45 +310,65 @@ def get_llm_feedback(transcript: str, user_goal: str, audio_path: Optional[Path]
         else:
             audio_note = "\n**AUDIO ANALYSIS NOTES:**\nNo audio file provided - analysis based on transcript only."
         
+        # Duration context
+        duration_context = ""
+        if duration > 0:
+            duration_context = f"\n**SPEECH METRICS:**\n- Duration: {duration} seconds ({duration_minutes:.1f} minutes)\n- Word count: {word_count}\n- Speaking pace: {actual_wpm} WPM (ideal: 140-160 WPM)"
+        
         # Construct comprehensive prompt
         prompt = f"""You are an expert public speaking coach analyzing a speech recording. Your goal is to provide constructive, actionable feedback to help the speaker improve.
 
-**SPEECH CONTEXT:**
-Speaker's Intended Message: "{user_goal}"
+**SPEAKER'S GOAL:** {user_goal}
 
-**TRANSCRIPT:**
-"{transcript}"
-
-**SPEECH METRICS:**
-- Word Count: {word_count} words
+**TRANSCRIPT TO ANALYZE:**
+{transcript}
+{duration_context}
 {audio_note}
 
----
+**CRITICAL SCORING INSTRUCTIONS:**
+- Score HONESTLY based on the actual content quality
+- DO NOT give similar scores to different speeches
+- Each speech is unique and should have DISTINCT scores
+- Poor speeches should score 40-60, average 60-75, good 75-85, excellent 85-95+
+- Be CRITICAL but FAIR - look for actual issues
+- Consider speech length: very short speeches (<30 words) should generally score lower
 
 **YOUR TASK:**
-Analyze this speech comprehensively and provide feedback in the following areas:
+Analyze this SPECIFIC speech across multiple dimensions:
 
-1. **CONTENT SUMMARY** (1-2 sentences):
-   - What was the main message delivered?
-   - Did the speaker achieve their stated goal?
-
-2. **CLARITY SCORE** (0-100):
+1. **CLARITY SCORE** (0-100):
    - How clearly did the speaker communicate their intended message?
    - Consider: organization, word choice, directness, coherence
-   - 90-100: Excellent clarity, message crystal clear
-   - 70-89: Good clarity, minor improvements needed
-   - 50-69: Moderate clarity, some confusion possible
-   - 0-49: Poor clarity, message unclear or disorganized
 
-3. **FILLER WORDS & VERBAL CRUTCHES**:
+2. **CONFIDENCE SCORE** (0-100):
+   - How confident and assertive does the speaker sound?
+   - Consider: use of hedging language, filler words, assertive statements
+
+3. **ENGAGEMENT SCORE** (0-100):
+   - How engaging and interesting is the content?
+   - Consider: storytelling, examples, energy, audience connection
+
+4. **STRUCTURE SCORE** (0-100):
+   - How well-organized is the speech?
+   - Consider: logical flow, clear beginning/middle/end, transitions
+
+5. **OVERALL SCORE** (0-10, can use decimals like 8.5):
+   - Holistic evaluation of the speech quality
+   - Consider all factors: clarity, confidence, engagement, structure
+
+6. **FILLER WORDS & VERBAL CRUTCHES**:
    - Note excessive use of: um, uh, like, you know, so, basically, actually, literally, kind of, sort of
-   - Consider their impact on message clarity
 
-4. **CONSTRUCTIVE FEEDBACK** (2-3 specific, actionable tips):
-   - Focus on the TOP improvement opportunity
-   - Be encouraging and specific
-   - Provide concrete techniques they can practice
-   - Consider: content structure, confidence markers, filler word reduction, pacing, audience engagement
+7. **STRENGTHS** (3-4 specific points):
+   - What did the speaker do well?
+   - Be specific with examples
+
+8. **IMPROVEMENTS** (3-4 specific actionable points):
+   - What can be improved?
+   - Be specific and actionable
+
+9. **CONSTRUCTIVE FEEDBACK** (2-3 sentences):
+   - Main improvement opportunity with actionable advice
 
 **IMPORTANT GUIDELINES:**
 - Be constructive and encouraging, not harsh
@@ -326,7 +382,13 @@ Return your analysis as a valid JSON object with this exact structure:
 {{
   "summary": "one or two sentence summary of what the speaker communicated",
   "clarityScore": number_between_0_and_100,
-  "tip": "detailed constructive feedback with specific actionable advice (2-3 sentences)"
+  "confidenceScore": number_between_0_and_100,
+  "engagementScore": number_between_0_and_100,
+  "structureScore": number_between_0_and_100,
+  "overall_score": number_between_0_and_10_with_decimals,
+  "tip": "detailed constructive feedback with specific actionable advice (2-3 sentences)",
+  "strengths": ["strength 1", "strength 2", "strength 3"],
+  "improvements": ["improvement 1", "improvement 2", "improvement 3"]
 }}
 
 CRITICAL: Return ONLY the JSON object, no other text before or after. Ensure the JSON is valid and properly formatted."""
@@ -351,16 +413,31 @@ CRITICAL: Return ONLY the JSON object, no other text before or after. Ensure the
             feedback_data = json.loads(response_text)
             
             # Validate required fields
-            if not all(key in feedback_data for key in ['summary', 'clarityScore', 'tip']):
-                raise ValueError("Missing required fields in LLM response")
+            required_fields = ['summary', 'clarityScore', 'confidenceScore', 'engagementScore', 
+                             'structureScore', 'overall_score', 'tip', 'strengths', 'improvements']
+            if not all(key in feedback_data for key in required_fields):
+                raise ValueError(f"Missing required fields in LLM response. Got: {list(feedback_data.keys())}")
             
-            # Ensure clarityScore is an integer
+            # Ensure scores are properly typed
             feedback_data['clarityScore'] = int(feedback_data['clarityScore'])
+            feedback_data['confidenceScore'] = int(feedback_data['confidenceScore'])
+            feedback_data['engagementScore'] = int(feedback_data['engagementScore'])
+            feedback_data['structureScore'] = int(feedback_data['structureScore'])
+            feedback_data['overall_score'] = float(feedback_data['overall_score'])
             
-            # Clamp clarity score to 0-100
+            # Clamp scores to valid ranges
             feedback_data['clarityScore'] = max(0, min(100, feedback_data['clarityScore']))
+            feedback_data['confidenceScore'] = max(0, min(100, feedback_data['confidenceScore']))
+            feedback_data['engagementScore'] = max(0, min(100, feedback_data['engagementScore']))
+            feedback_data['structureScore'] = max(0, min(100, feedback_data['structureScore']))
+            feedback_data['overall_score'] = max(0.0, min(10.0, feedback_data['overall_score']))
             
-            print(f"✓ LLM analysis complete - Clarity Score: {feedback_data['clarityScore']}")
+            print(f"✓ LLM analysis complete:")
+            print(f"  - Clarity: {feedback_data['clarityScore']}/100")
+            print(f"  - Confidence: {feedback_data['confidenceScore']}/100")
+            print(f"  - Engagement: {feedback_data['engagementScore']}/100")
+            print(f"  - Structure: {feedback_data['structureScore']}/100")
+            print(f"  - Overall: {feedback_data['overall_score']}/10")
             return feedback_data
             
         except json.JSONDecodeError as e:
@@ -371,11 +448,17 @@ CRITICAL: Return ONLY the JSON object, no other text before or after. Ensure the
     except Exception as e:
         print(f"❌ Error calling Gemini API: {e}")
         
-        # Fallback response
+        # Fallback response with all required fields
         return {
             "summary": f"Unable to generate AI feedback. Error: {str(e)[:100]}",
             "clarityScore": 70,
-            "tip": "The AI analysis service encountered an error. Please try again or check your API configuration."
+            "confidenceScore": 65,
+            "engagementScore": 60,
+            "structureScore": 70,
+            "overall_score": 6.6,
+            "tip": "The AI analysis service encountered an error. Please try again or check your API configuration.",
+            "strengths": ["Speech recorded successfully", "Basic structure present"],
+            "improvements": ["AI analysis unavailable", "Please configure GEMINI_API_KEY"]
         }
 
 
