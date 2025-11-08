@@ -1,0 +1,166 @@
+/* Account Page Styles - Meditative Theme */
+
+.account-page {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #f8faf9 0%, #eef5f2 100%);
+  padding: 40px 20px;
+}
+
+.account-container {
+  max-width: 900px;
+  margin: 0 auto;
+  padding-top: 40px;
+}
+
+.account-header {
+  text-align: center;
+  margin-bottom: 40px;
+}
+
+.account-header h1 {
+  font-family: 'Crimson Text', serif;
+  font-size: 2.5rem;
+  color: #2d3748;
+  margin: 0 0 12px 0;
+  font-weight: 600;
+}
+
+.account-header p {
+  font-family: 'Lato', sans-serif;
+  font-size: 1.1rem;
+  color: #718096;
+  margin: 0;
+}
+
+.account-card {
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(10px);
+  border-radius: 20px;
+  padding: 40px;
+  box-shadow: 0 8px 32px rgba(143, 185, 168, 0.15);
+  border: 1px solid rgba(143, 185, 168, 0.2);
+}
+
+.account-section {
+  margin-bottom: 40px;
+}
+
+.account-section:last-child {
+  margin-bottom: 0;
+}
+
+.account-section h2 {
+  font-family: 'Crimson Text', serif;
+  font-size: 1.8rem;
+  color: #8fb9a8;
+  margin: 0 0 24px 0;
+  padding-bottom: 12px;
+  border-bottom: 2px solid rgba(143, 185, 168, 0.2);
+}
+
+.info-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 24px;
+}
+
+.info-item {
+  background: linear-gradient(135deg, rgba(143, 185, 168, 0.08), rgba(168, 197, 209, 0.08));
+  padding: 20px;
+  border-radius: 12px;
+  border: 1px solid rgba(143, 185, 168, 0.15);
+}
+
+.info-item label {
+  font-family: 'Lato', sans-serif;
+  font-size: 0.85rem;
+  color: #8fb9a8;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  display: block;
+  margin-bottom: 8px;
+}
+
+.info-item p {
+  font-family: 'Lato', sans-serif;
+  font-size: 1rem;
+  color: #2d3748;
+  margin: 0;
+  word-break: break-word;
+}
+
+.action-buttons {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 16px;
+}
+
+.action-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  padding: 18px 24px;
+  border: none;
+  border-radius: 12px;
+  background: linear-gradient(135deg, rgba(143, 185, 168, 0.15), rgba(168, 197, 209, 0.15));
+  color: #2d3748;
+  font-family: 'Lato', sans-serif;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  border: 2px solid transparent;
+}
+
+.action-btn:hover {
+  background: linear-gradient(135deg, #8fb9a8, #a8c5d1);
+  color: white;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(143, 185, 168, 0.3);
+}
+
+.action-btn:active {
+  transform: translateY(0);
+}
+
+.action-btn span {
+  font-size: 1.3rem;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .account-page {
+    padding: 20px 16px;
+  }
+
+  .account-container {
+    padding-top: 20px;
+  }
+
+  .account-header h1 {
+    font-size: 2rem;
+  }
+
+  .account-header p {
+    font-size: 1rem;
+  }
+
+  .account-card {
+    padding: 24px;
+  }
+
+  .account-section h2 {
+    font-size: 1.5rem;
+  }
+
+  .info-grid {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+
+  .action-buttons {
+    grid-template-columns: 1fr;
+  }
+}

@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import FeedbackReport from "../components/FeedbackReport";
+import NavMenu from "../components/NavMenu";
+import "./FeedbackPage.css";
 
 function FeedbackPage() {
   const { id } = useParams();
@@ -56,21 +58,23 @@ function FeedbackPage() {
 
   if (loading)
     return (
-      <div style={{ padding: 20 }}>Loading feedback...</div>
+      <div className="feedback-loading">
+        <div>🧘 Loading your insights...</div>
+      </div>
     );
   if (error)
     return (
-      <div style={{ padding: 20 }}>
+      <div className="feedback-error">
         <p>Error loading feedback: {error}</p>
         <button onClick={() => navigate("/")}>
-          Go back
+          Return Home
         </button>
       </div>
     );
 
   return (
-    <div style={{ padding: 20 }}>
-      <h1>Feedback for session: {id}</h1>
+    <div className="feedback-page-container">
+      <NavMenu />
       <FeedbackReport data={data} />
     </div>
   );

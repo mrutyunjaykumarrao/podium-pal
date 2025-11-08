@@ -15,19 +15,24 @@
 }
 
 .transcript-section h2 {
-  color: #a29bfe;
+  background: linear-gradient(135deg, #a8c5d1, #b8d4c8);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
   margin-bottom: 15px;
   font-size: 1.5rem;
-  font-weight: 700;
+  font-weight: 600;
+  font-family: 'Crimson Text', serif;
   display: flex;
   align-items: center;
   gap: 10px;
+  letter-spacing: 0.5px;
 }
 
 .transcript-box {
-  background: rgba(42, 42, 62, 0.6);
+  background: rgba(168, 197, 209, 0.08);
   backdrop-filter: blur(15px);
-  border: 2px solid rgba(108, 92, 231, 0.3);
+  border: 2px solid rgba(168, 197, 209, 0.2);
   border-radius: 16px;
   padding: 20px;
   min-height: 150px;
@@ -35,24 +40,26 @@
   overflow-y: auto;
   line-height: 1.8;
   font-size: 1.1rem;
-  color: #d0d0d0;
+  color: #b8c9d9;
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   position: relative;
   box-shadow: 
-    0 4px 20px rgba(0, 0, 0, 0.2),
-    inset 0 1px 0 rgba(255, 255, 255, 0.05);
+    0 4px 20px rgba(0, 0, 0, 0.15),
+    inset 0 1px 0 rgba(255, 255, 255, 0.03);
+  scroll-behavior: smooth;
 }
 
 .transcript-box:empty::before {
   content: 'Your speech will appear here as you speak...';
-  color: #6a6a7a;
+  color: #8ba3a3;
   font-style: italic;
+  font-family: 'Crimson Text', serif;
 }
 
 .transcript-box:hover {
-  border-color: rgba(108, 92, 231, 0.5);
+  border-color: rgba(168, 197, 209, 0.4);
   box-shadow: 
-    0 8px 30px rgba(108, 92, 231, 0.2),
+    0 8px 30px rgba(168, 197, 209, 0.15),
     inset 0 1px 0 rgba(255, 255, 255, 0.05);
   transform: translateY(-1px);
 }
@@ -62,20 +69,21 @@
 }
 
 .transcript-box::-webkit-scrollbar-track {
-  background: rgba(30, 30, 46, 0.4);
+  background: rgba(168, 197, 209, 0.05);
   border-radius: 10px;
   margin: 4px;
 }
 
 .transcript-box::-webkit-scrollbar-thumb {
-  background: linear-gradient(180deg, #6c5ce7 0%, #a29bfe 100%);
+  background: linear-gradient(180deg, rgba(168, 197, 209, 0.3) 0%, rgba(184, 212, 200, 0.3) 100%);
   border-radius: 10px;
-  transition: background 0.3s ease;
-  border: 2px solid rgba(42, 42, 62, 0.6);
+  transition: all 0.3s ease;
+  border: 2px solid rgba(26, 26, 46, 0.5);
 }
 
 .transcript-box::-webkit-scrollbar-thumb:hover {
-  background: linear-gradient(180deg, #a29bfe 0%, #74b9ff 100%);
+  background: linear-gradient(180deg, rgba(168, 197, 209, 0.5) 0%, rgba(184, 212, 200, 0.5) 100%);
+  border-color: rgba(168, 197, 209, 0.3);
 }
 
 /* Responsive */
