@@ -4,7 +4,7 @@ Podium Pal Backend - FastAPI Application
 A stateless API that analyzes speech transcripts and audio for comprehensive feedback.
 """
 
-from fastapi import FastAPI, HTTPException, File, UploadFile, Form
+from fastapi import FastAPI, HTTPException, File, UploadFile, Form, Body, Request
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel, Field
 from typing import Dict, Optional
@@ -16,6 +16,7 @@ from datetime import datetime
 import json
 import re
 import google.generativeai as genai
+import uuid
 
 # Load environment variables
 load_dotenv()
@@ -23,6 +24,10 @@ load_dotenv()
 # Create directory for storing audio files
 AUDIO_STORAGE_DIR = Path("audio_recordings")
 AUDIO_STORAGE_DIR.mkdir(exist_ok=True)
+
+# Create directory for storing feedback sessions
+FEEDBACK_STORAGE_DIR = Path("feedback_sessions")
+FEEDBACK_STORAGE_DIR.mkdir(exist_ok=True)
 
 # Configure Gemini AI
 GEMINI_API_KEY = os.getenv("GEMINI_API_KEY")
@@ -84,6 +89,7 @@ class AnalyzeRequest(BaseModel):
 
 class AnalyzeResponse(BaseModel):
     """Response model for the /analyze endpoint"""
+    sessionId: str = Field(..., description="Unique session identifier")
     pace: int = Field(..., description="Speaking pace in words per minute")
     fillerWords: Dict[str, int] = Field(..., description="Dictionary of filler words and their counts")
     aiSummary: str = Field(..., description="AI-generated summary of the speech")
@@ -135,12 +141,7 @@ async def root():
 
 
 @app.post("/analyze", response_model=AnalyzeResponse)
-async def analyze_speech(
-    transcript: str = Form(...),
-    userGoal: str = Form(...),
-    duration: int = Form(0),  # Duration in seconds
-    audio: UploadFile = File(None)
-):
+async def analyze_speech(request: Request):
     """
     Analyze a speech transcript and audio recording, providing comprehensive feedback
     
@@ -151,48 +152,59 @@ async def analyze_speech(
         audio: Optional audio file of the speech (multipart/form-data)
         
     Returns:
-        AnalyzeResponse with pace, filler words, AI summary, clarity score, and tip
+        AnalyzeResponse with sessionId, pace, filler words, AI summary, clarity score, and tip
     """
     try:
+        # Generate unique session ID
+        session_id = str(uuid.uuid4())
+
+        # Detect request content-type and parse accordingly
+        content_type = request.headers.get('content-type', '')
+        transcript = None
+        userGoal = None
+        duration = 0
+        audio_path = None
+
+        if 'application/json' in content_type:
+            print('-> Received JSON analyze request')
+            body = await request.json()
+            transcript = body.get('transcript')
+            userGoal = body.get('userGoal') or body.get('user_goal')
+            duration = int(body.get('duration', 0) or 0)
+        else:
+            # Assume multipart/form-data (form + optional file)
+            print('-> Received multipart/form-data analyze request')
+            form = await request.form()
+            transcript = form.get('transcript')
+            userGoal = form.get('userGoal') or form.get('user_goal')
+            duration = int(form.get('duration', 0) or 0)
+            audio = form.get('audio') if 'audio' in form else None
+            if audio and hasattr(audio, 'filename') and audio.filename:
+                # Save uploaded audio file
+                timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+                file_extension = audio.filename.split('.')[-1] if '.' in audio.filename else 'webm'
+                audio_filename = f"recording_{timestamp}.{file_extension}"
+                audio_path = AUDIO_STORAGE_DIR / audio_filename
+                with open(audio_path, 'wb') as buffer:
+                    shutil.copyfileobj(audio.file, buffer)
+                print(f"Audio saved to: {audio_path}")
+
         print(f"=== Analyze Request Received ===")
-        print(f"Transcript length: {len(transcript)} chars")
-        print(f"Transcript preview: {transcript[:100]}...")
+        print(f"Session ID: {session_id}")
+        print(f"Transcript length: {len(transcript) if transcript else 0} chars")
+        print(f"Transcript preview: {(transcript or '')[:100]}...")
         print(f"UserGoal: {userGoal}")
         print(f"Duration: {duration} seconds")
-        print(f"Audio file: {audio.filename if audio and hasattr(audio, 'filename') and audio.filename else 'None'}")
-        
-        # Validate inputs
-        if not transcript or len(transcript.strip()) == 0:
-            raise HTTPException(status_code=422, detail="Transcript cannot be empty")
-        
-        if not userGoal or len(userGoal.strip()) == 0:
-            raise HTTPException(status_code=422, detail="User goal cannot be empty")
-        
-        # Save audio file if provided
-        audio_path = None
-        if audio and hasattr(audio, 'filename') and audio.filename:
-            # Generate unique filename with timestamp
-            timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
-            file_extension = audio.filename.split('.')[-1] if '.' in audio.filename else 'webm'
-            audio_filename = f"recording_{timestamp}.{file_extension}"
-            audio_path = AUDIO_STORAGE_DIR / audio_filename
-            
-            # Save the uploaded audio file
-            with open(audio_path, "wb") as buffer:
-                shutil.copyfileobj(audio.file, buffer)
-            
-            print(f"Audio saved to: {audio_path}")
-            print(f"Audio size: {audio_path.stat().st_size} bytes")
-        
-        # Calculate basic metrics (pace, filler words) from transcript
-        metrics = calculate_metrics(transcript, duration)
-        
-        # Get AI-powered feedback (summary, clarity score, tip)
-        # Pass audio_path to LLM function for future audio analysis
-        llm_feedback = get_llm_feedback(transcript, userGoal, audio_path, duration)
+        # Calculate metrics and request LLM feedback
+        print("-> Calculating metrics...")
+        metrics = calculate_metrics(transcript or '', duration)
+
+        print("-> Requesting LLM feedback...")
+        llm_feedback = get_llm_feedback(transcript or '', userGoal or '', audio_path, duration)
         
         # Combine results into response
         response = AnalyzeResponse(
+            sessionId=session_id,
             pace=metrics["pace"],
             fillerWords=metrics["fillerWords"],
             aiSummary=llm_feedback["summary"],
@@ -206,10 +218,55 @@ async def analyze_speech(
             improvements=llm_feedback["improvements"]
         )
         
+        # Save feedback session to file
+        session_data = {
+            "sessionId": session_id,
+            "timestamp": datetime.now().isoformat(),
+            "transcript": transcript,
+            "userGoal": userGoal,
+            "duration": duration,
+            "audioPath": str(audio_path) if audio_path else None,
+            "feedback": response.dict()
+        }
+        
+        session_file = FEEDBACK_STORAGE_DIR / f"{session_id}.json"
+        with open(session_file, "w") as f:
+            json.dump(session_data, f, indent=2)
+        
+        print(f"✓ Session saved: {session_file}")
+        
         return response
         
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Analysis failed: {str(e)}")
+
+
+@app.get("/feedback/{session_id}")
+async def get_feedback(session_id: str):
+    """Retrieve stored feedback by session id"""
+    try:
+        print(f"GET /feedback/{session_id} requested")
+        session_file = FEEDBACK_STORAGE_DIR / f"{session_id}.json"
+        if not session_file.exists():
+            print(f"-> Feedback file not found: {session_file}")
+            raise HTTPException(status_code=404, detail="Feedback not found")
+
+        with open(session_file, "r", encoding="utf-8") as f:
+            session_data = json.load(f)
+
+        feedback = session_data.get("feedback")
+        if not feedback:
+            print(f"-> No feedback object in session file: {session_file}")
+            raise HTTPException(status_code=500, detail="Feedback data missing")
+
+        print(f"-> Returning feedback for session: {session_id}")
+        return feedback
+
+    except HTTPException:
+        raise
+    except Exception as e:
+        print(f"❌ Error retrieving feedback: {e}")
+        raise HTTPException(status_code=500, detail=f"Failed to retrieve feedback: {e}")
 
 
 # ========================================

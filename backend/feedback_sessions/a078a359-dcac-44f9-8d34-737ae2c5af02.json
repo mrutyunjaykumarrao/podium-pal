@@ -1,0 +1,31 @@
+{
+  "sessionId": "a078a359-dcac-44f9-8d34-737ae2c5af02",
+  "timestamp": "2025-11-08T17:34:41.628824",
+  "transcript": "I know so like where do you see that",
+  "userGoal": "i am going for the interview ",
+  "duration": 16,
+  "audioPath": null,
+  "feedback": {
+    "sessionId": "a078a359-dcac-44f9-8d34-737ae2c5af02",
+    "pace": 33,
+    "fillerWords": {
+      "like": 1,
+      "so": 1
+    },
+    "aiSummary": "The speaker's utterance is unclear and seems to be a fragment of a question, possibly related to career aspirations or future vision. The use of filler words and lack of context make it difficult to understand.",
+    "clarityScore": 25,
+    "confidenceScore": 30,
+    "engagementScore": 15,
+    "structureScore": 10,
+    "overall_score": 2.5,
+    "constructiveTip": "Focus on constructing complete and clear sentences when answering interview questions. Practice structuring your responses using the STAR method (Situation, Task, Action, Result) to provide context and demonstrate your skills effectively.",
+    "strengths": [
+      "Acknowledging a question (implied)"
+    ],
+    "improvements": [
+      "Clearly and concisely answer questions",
+      "Avoid starting sentences with filler words",
+      "Frame your response within the context of the question being asked"
+    ]
+  }
+}

@@ -1,0 +1,30 @@
+{
+  "sessionId": "89254bd3-779c-466a-aa8d-a364f6fb112f",
+  "timestamp": "2025-11-08T17:31:02.106632",
+  "transcript": "hello hello",
+  "userGoal": "lkjhasdlfkjdsf",
+  "duration": 8,
+  "audioPath": null,
+  "feedback": {
+    "sessionId": "89254bd3-779c-466a-aa8d-a364f6fb112f",
+    "pace": 15,
+    "fillerWords": {},
+    "aiSummary": "The speaker uttered the word \"hello\" twice.",
+    "clarityScore": 20,
+    "confidenceScore": 50,
+    "engagementScore": 10,
+    "structureScore": 30,
+    "overall_score": 2.5,
+    "constructiveTip": "Expand your speech beyond a simple greeting. Consider what you want to communicate and structure your thoughts into a clear introduction, body, and conclusion to effectively convey your message to the audience.",
+    "strengths": [
+      "Clear pronunciation of the word \"hello\"",
+      "Audible delivery (assuming proper audio)",
+      "Direct (said exactly what they intended)"
+    ],
+    "improvements": [
+      "Develop a clear and concise message",
+      "Structure your speech with an introduction, body, and conclusion",
+      "Practice speaking at a more appropriate pace (140-160 WPM)"
+    ]
+  }
+}

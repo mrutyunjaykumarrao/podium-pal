@@ -143,8 +143,19 @@ function App() {
       }
 
       const data = await response.json();
+      console.log('Analysis response:', data);
       setFeedback(data);
       setStatusText('✓ Analysis complete!');
+
+      // Navigate to feedback page if sessionId present
+      try {
+        if (data && data.sessionId) {
+          console.log('Navigating to /feedback/', data.sessionId);
+          window.location.href = `/feedback/${data.sessionId}`;
+        }
+      } catch (navErr) {
+        console.error('Navigation error:', navErr);
+      }
       
       // Save to recording history with actual values
       const durationMinutes = duration / 60;

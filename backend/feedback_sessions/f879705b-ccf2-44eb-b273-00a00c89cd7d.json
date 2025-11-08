@@ -1,0 +1,30 @@
+{
+  "sessionId": "f879705b-ccf2-44eb-b273-00a00c89cd7d",
+  "timestamp": "2025-11-08T17:32:04.159320",
+  "transcript": "what is your name my name is nishchay Nish",
+  "userGoal": "heelo ",
+  "duration": 12,
+  "audioPath": null,
+  "feedback": {
+    "sessionId": "f879705b-ccf2-44eb-b273-00a00c89cd7d",
+    "pace": 45,
+    "fillerWords": {},
+    "aiSummary": "The speaker introduces themselves by stating their name is Nishchay Nish.",
+    "clarityScore": 70,
+    "confidenceScore": 75,
+    "engagementScore": 50,
+    "structureScore": 60,
+    "overall_score": 6.0,
+    "constructiveTip": "To improve, aim for a more natural and varied tone. Consider adding a simple follow-up, like 'Nice to meet you,' to create a more welcoming introduction and make the speech more engaging.",
+    "strengths": [
+      "Directly states their name.",
+      "Clear pronunciation (assuming audio matches transcript).",
+      "Concise introduction."
+    ],
+    "improvements": [
+      "Increase speaking pace to be closer to the ideal range.",
+      "Add a sentence or two for context or to build rapport.",
+      "Avoid repeating the name immediately; find a different way to phrase the introduction."
+    ]
+  }
+}

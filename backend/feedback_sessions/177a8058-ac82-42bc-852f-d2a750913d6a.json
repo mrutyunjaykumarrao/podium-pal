@@ -1,0 +1,31 @@
+{
+  "sessionId": "177a8058-ac82-42bc-852f-d2a750913d6a",
+  "timestamp": "2025-11-08T17:34:38.684747",
+  "transcript": "I know so like where do you see that",
+  "userGoal": "i am going for the interview ",
+  "duration": 16,
+  "audioPath": "audio_recordings\\recording_20251108_173435.webm",
+  "feedback": {
+    "sessionId": "177a8058-ac82-42bc-852f-d2a750913d6a",
+    "pace": 33,
+    "fillerWords": {
+      "like": 1,
+      "so": 1
+    },
+    "aiSummary": "The speaker's utterance is a fragment of a question, likely intended for the interviewer, but it's incomplete and lacks context.",
+    "clarityScore": 40,
+    "confidenceScore": 50,
+    "engagementScore": 30,
+    "structureScore": 20,
+    "overall_score": 3.5,
+    "constructiveTip": "To improve your clarity, practice formulating complete and direct questions or statements. Avoid filler words and ensure your sentences have a clear subject, verb, and object so the interviewer understands your intention immediately.",
+    "strengths": [
+      "Speaker initiated conversation with the interviewer"
+    ],
+    "improvements": [
+      "Formulate complete sentences to express ideas clearly",
+      "Eliminate filler words like 'so' and 'like'",
+      "Focus on delivering a clear and concise message"
+    ]
+  }
+}
