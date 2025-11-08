@@ -46,3 +46,5 @@ Thumbs.db
 backend/audio_recordings/
 
 References
+feedback_sessions
+*.backup
