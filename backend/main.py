@@ -246,7 +246,7 @@ async def analyze_speech(request: Request):
 
 @app.get("/feedback/{session_id}")
 async def get_feedback(session_id: str):
-    """Retrieve stored feedback by session id"""
+    """Retrieve stored feedback by session id - returns FULL session data"""
     try:
         print(f"GET /feedback/{session_id} requested")
         session_file = FEEDBACK_STORAGE_DIR / f"{session_id}.json"
@@ -257,13 +257,10 @@ async def get_feedback(session_id: str):
         with open(session_file, "r", encoding="utf-8") as f:
             session_data = json.load(f)
 
-        feedback = session_data.get("feedback")
-        if not feedback:
-            print(f"-> No feedback object in session file: {session_file}")
-            raise HTTPException(status_code=500, detail="Feedback data missing")
-
-        print(f"-> Returning feedback for session: {session_id}")
-        return feedback
+        # Return FULL session data (not just feedback object)
+        # This includes: transcript, userGoal, duration, feedback, etc.
+        print(f"-> Returning full session data for: {session_id}")
+        return session_data
 
     except HTTPException:
         raise

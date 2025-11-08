@@ -1,0 +1,29 @@
+{
+  "sessionId": "d14dcecb-6882-457a-b177-2a78e840e336",
+  "timestamp": "2025-11-09T03:53:55.545059",
+  "transcript": "hello hello",
+  "userGoal": "sdfsdfa",
+  "duration": 7,
+  "audioPath": null,
+  "feedback": {
+    "sessionId": "d14dcecb-6882-457a-b177-2a78e840e336",
+    "pace": 17,
+    "fillerWords": {},
+    "aiSummary": "The speaker provided a very brief greeting. It's difficult to assess much from such a short utterance.",
+    "clarityScore": 50,
+    "confidenceScore": 60,
+    "engagementScore": 40,
+    "structureScore": 30,
+    "overall_score": 3.0,
+    "constructiveTip": "To make a stronger impact, consider expanding on your introduction with more context or a specific opening. Even a simple follow-up sentence can drastically improve engagement and clarity.",
+    "strengths": [
+      "The speaker initiated the speech.",
+      "There were no filler words."
+    ],
+    "improvements": [
+      "Add more content to the speech.",
+      "Introduce a clear topic or purpose.",
+      "Work on varying your tone and pace."
+    ]
+  }
+}
