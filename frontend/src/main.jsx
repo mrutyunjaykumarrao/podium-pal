@@ -15,7 +15,7 @@ import Auth from "./pages/Auth";
 import ProtectedRoute from "./components/ProtectedRoute";
 import { AuthProvider } from "./contexts/AuthContext";
 
-console.log('[Main] Initializing Podium Pal application');
+console.log("[Main] Initializing Podium Pal application");
 
 createRoot(document.getElementById("root")).render(
   <StrictMode>

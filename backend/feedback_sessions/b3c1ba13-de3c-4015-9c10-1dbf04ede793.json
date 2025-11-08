@@ -1,0 +1,29 @@
+{
+  "sessionId": "b3c1ba13-de3c-4015-9c10-1dbf04ede793",
+  "timestamp": "2025-11-09T03:25:52.954953",
+  "transcript": "hello hello",
+  "userGoal": "jjnmknm",
+  "duration": 8,
+  "audioPath": "audio_recordings\\recording_20251109_032551.webm",
+  "feedback": {
+    "sessionId": "b3c1ba13-de3c-4015-9c10-1dbf04ede793",
+    "pace": 15,
+    "fillerWords": {},
+    "aiSummary": "The speaker provided a very brief greeting.",
+    "clarityScore": 60,
+    "confidenceScore": 70,
+    "engagementScore": 50,
+    "structureScore": 40,
+    "overall_score": 5.5,
+    "constructiveTip": "To make your speech more impactful, try expanding on your initial greeting with a brief introduction or topic overview. Consider adding a few more sentences to give the audience context and make it more engaging from the start.",
+    "strengths": [
+      "Clear pronunciation",
+      "Direct opening"
+    ],
+    "improvements": [
+      "Expand on the initial statement",
+      "Add an introduction",
+      "Increase speaking pace"
+    ]
+  }
+}
