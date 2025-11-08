@@ -64,8 +64,93 @@
 .recording-section {
   text-align: center;
   margin: 20px 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
 }
 
+.record-button-container {
+  position: relative;
+  display: inline-block;
+}
+
+/* Round Recording Button */
+.record-btn-round {
+  position: relative;
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  border: none;
+  background: linear-gradient(135deg, #6c5ce7 0%, #a29bfe 100%);
+  color: white;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 8px 25px rgba(108, 92, 231, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10;
+}
+
+.record-btn-round:hover {
+  transform: scale(1.05);
+  box-shadow: 0 12px 30px rgba(108, 92, 231, 0.7);
+}
+
+.record-btn-round:active {
+  transform: scale(0.98);
+}
+
+.record-btn-round.recording {
+  background: linear-gradient(135deg, #ff6b6b 0%, #ee5a6f 100%);
+  box-shadow: 0 8px 25px rgba(255, 107, 107, 0.5);
+}
+
+/* Microphone Icon */
+.mic-icon {
+  position: relative;
+  z-index: 12;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.2));
+}
+
+/* Sound Waves */
+.sound-wave {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  pointer-events: none;
+  transition: transform 0.08s ease-out, opacity 0.08s ease-out;
+  transform: translate(-50%, -50%) scale(1);
+  will-change: transform, opacity;
+}
+
+.wave-1 {
+  width: 130px;
+  height: 130px;
+  border: 3px solid rgba(0, 255, 255, 0.9); /* Cyan */
+}
+
+.wave-2 {
+  width: 145px;
+  height: 145px;
+  border: 2.5px solid rgba(138, 43, 226, 0.8); /* Purple */
+}
+
+.wave-3 {
+  width: 160px;
+  height: 160px;
+  border: 2px solid rgba(255, 20, 147, 0.7); /* Deep Pink */
+}
+
+/* Old button style - keeping for fallback */
 .record-btn {
   padding: 20px 50px;
   font-size: 1.3rem;
