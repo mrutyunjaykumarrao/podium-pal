@@ -1,166 +1,387 @@
-/* Account Page Styles - Meditative Theme */
+/* Account Page - Meditative Theme */
 
 .account-page {
   min-height: 100vh;
-  background: linear-gradient(135deg, #f8faf9 0%, #eef5f2 100%);
-  padding: 40px 20px;
+  background: linear-gradient(135deg, #e8f0f2 0%, #f5f8f9 50%, #e8f4f0 100%);
+  padding: 80px 20px 40px;
+  font-family: 'Lato', sans-serif;
 }
 
 .account-container {
   max-width: 900px;
   margin: 0 auto;
-  padding-top: 40px;
 }
 
+/* Page Header */
 .account-header {
-  text-align: center;
   margin-bottom: 40px;
+  animation: fadeInUp 0.6s ease-out;
+}
+
+.account-header .header-content {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.account-header .header-icon {
+  width: 60px;
+  height: 60px;
+  background: linear-gradient(135deg, #a8c5d1, #b8d4c8);
+  border-radius: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  box-shadow: 0 4px 20px rgba(168, 197, 209, 0.3);
 }
 
 .account-header h1 {
   font-family: 'Crimson Text', serif;
   font-size: 2.5rem;
-  color: #2d3748;
-  margin: 0 0 12px 0;
+  color: #2c3e50;
+  margin: 0;
   font-weight: 600;
 }
 
-.account-header p {
-  font-family: 'Lato', sans-serif;
-  font-size: 1.1rem;
-  color: #718096;
-  margin: 0;
+.account-header .header-subtitle {
+  color: #7f8c8d;
+  margin: 5px 0 0 0;
+  font-size: 1rem;
 }
 
-.account-card {
-  background: rgba(255, 255, 255, 0.95);
+/* Account Sections */
+.account-section {
+  background: rgba(255, 255, 255, 0.7);
   backdrop-filter: blur(10px);
   border-radius: 20px;
-  padding: 40px;
-  box-shadow: 0 8px 32px rgba(143, 185, 168, 0.15);
-  border: 1px solid rgba(143, 185, 168, 0.2);
+  padding: 30px;
+  margin-bottom: 30px;
+  border: 1px solid rgba(168, 197, 209, 0.2);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.08);
+  animation: fadeInUp 0.6s ease-out;
+  animation-fill-mode: both;
 }
 
-.account-section {
-  margin-bottom: 40px;
+.account-section:nth-child(2) { animation-delay: 0.1s; }
+.account-section:nth-child(3) { animation-delay: 0.2s; }
+.account-section:nth-child(4) { animation-delay: 0.3s; }
+.account-section:nth-child(5) { animation-delay: 0.4s; }
+
+.section-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 25px;
+  padding-bottom: 15px;
+  border-bottom: 2px solid rgba(168, 197, 209, 0.2);
+  position: relative;
 }
 
-.account-section:last-child {
-  margin-bottom: 0;
-}
-
-.account-section h2 {
-  font-family: 'Crimson Text', serif;
-  font-size: 1.8rem;
-  color: #8fb9a8;
-  margin: 0 0 24px 0;
-  padding-bottom: 12px;
-  border-bottom: 2px solid rgba(143, 185, 168, 0.2);
-}
-
-.info-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-  gap: 24px;
-}
-
-.info-item {
-  background: linear-gradient(135deg, rgba(143, 185, 168, 0.08), rgba(168, 197, 209, 0.08));
-  padding: 20px;
+.section-icon {
+  width: 44px;
+  height: 44px;
+  background: linear-gradient(135deg, #a8c5d1, #b8d4c8);
   border-radius: 12px;
-  border: 1px solid rgba(143, 185, 168, 0.15);
-}
-
-.info-item label {
-  font-family: 'Lato', sans-serif;
-  font-size: 0.85rem;
-  color: #8fb9a8;
-  font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-  display: block;
-  margin-bottom: 8px;
-}
-
-.info-item p {
-  font-family: 'Lato', sans-serif;
-  font-size: 1rem;
-  color: #2d3748;
-  margin: 0;
-  word-break: break-word;
-}
-
-.action-buttons {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-  gap: 16px;
-}
-
-.action-btn {
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 12px;
-  padding: 18px 24px;
+  color: white;
+}
+
+.section-header h2 {
+  font-family: 'Crimson Text', serif;
+  font-size: 1.8rem;
+  color: #2c3e50;
+  margin: 0;
+  flex: 1;
+}
+
+.edit-btn {
+  background: linear-gradient(135deg, #a8c5d1, #b8d4c8);
+  color: white;
   border: none;
-  border-radius: 12px;
-  background: linear-gradient(135deg, rgba(143, 185, 168, 0.15), rgba(168, 197, 209, 0.15));
-  color: #2d3748;
+  padding: 8px 20px;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-weight: 500;
+}
+
+.edit-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(168, 197, 209, 0.4);
+}
+
+/* Personal Information Grid */
+.info-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 20px;
+}
+
+.info-field {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.info-field.full-width {
+  grid-column: 1 / -1;
+}
+
+.info-field label {
+  font-weight: 600;
+  color: #5a6c7d;
+  font-size: 0.9rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.info-value {
+  padding: 12px 16px;
+  background: rgba(168, 197, 209, 0.1);
+  border-radius: 10px;
+  color: #2c3e50;
+  font-size: 1rem;
+  border: 1px solid rgba(168, 197, 209, 0.2);
+}
+
+.info-note {
+  font-size: 0.85rem;
+  color: #95a5a6;
+  font-style: italic;
+  margin-top: -4px;
+}
+
+.meditative-input,
+.meditative-textarea {
+  padding: 12px 16px;
+  background: rgba(255, 255, 255, 0.9);
+  border: 2px solid rgba(168, 197, 209, 0.3);
+  border-radius: 10px;
   font-family: 'Lato', sans-serif;
+  font-size: 1rem;
+  color: #2c3e50;
+  transition: all 0.3s ease;
+}
+
+.meditative-input:focus,
+.meditative-textarea:focus {
+  outline: none;
+  border-color: #a8c5d1;
+  background: white;
+  box-shadow: 0 0 0 4px rgba(168, 197, 209, 0.1);
+}
+
+.meditative-textarea {
+  resize: vertical;
+  min-height: 100px;
+}
+
+/* Action Buttons */
+.action-buttons {
+  display: flex;
+  gap: 12px;
+  margin-top: 25px;
+  padding-top: 20px;
+  border-top: 1px solid rgba(168, 197, 209, 0.2);
+}
+
+.save-btn,
+.change-password-btn {
+  background: linear-gradient(135deg, #8fb9a8, #a3c9b8);
+  color: white;
+  border: none;
+  padding: 12px 28px;
+  border-radius: 10px;
   font-size: 1rem;
   font-weight: 600;
   cursor: pointer;
   transition: all 0.3s ease;
-  border: 2px solid transparent;
 }
 
-.action-btn:hover {
-  background: linear-gradient(135deg, #8fb9a8, #a8c5d1);
-  color: white;
+.save-btn:hover,
+.change-password-btn:hover {
   transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(143, 185, 168, 0.3);
+  box-shadow: 0 6px 20px rgba(143, 185, 168, 0.4);
 }
 
-.action-btn:active {
-  transform: translateY(0);
+.save-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none;
 }
 
-.action-btn span {
-  font-size: 1.3rem;
+.cancel-btn {
+  background: rgba(149, 165, 166, 0.1);
+  color: #5a6c7d;
+  border: 2px solid rgba(149, 165, 166, 0.3);
+  padding: 12px 28px;
+  border-radius: 10px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.cancel-btn:hover {
+  background: rgba(149, 165, 166, 0.2);
+  border-color: rgba(149, 165, 166, 0.5);
+}
+
+/* Account Details Grid */
+.detail-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 20px;
+}
+
+.detail-item {
+  padding: 20px;
+  background: rgba(168, 197, 209, 0.05);
+  border-radius: 12px;
+  border: 1px solid rgba(168, 197, 209, 0.15);
+  transition: all 0.3s ease;
+}
+
+.detail-item:hover {
+  background: rgba(168, 197, 209, 0.1);
+  transform: translateY(-2px);
+}
+
+.detail-label {
+  font-size: 0.85rem;
+  color: #7f8c8d;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 8px;
+  font-weight: 600;
+}
+
+.detail-value {
+  font-size: 1.1rem;
+  color: #2c3e50;
+  font-weight: 500;
+}
+
+.detail-value.monospace {
+  font-family: 'Courier New', monospace;
+  font-size: 0.95rem;
+  color: #5a6c7d;
+}
+
+.detail-value.highlight {
+  color: #8fb9a8;
+  font-size: 1.5rem;
+  font-weight: 700;
+}
+
+/* Security Section */
+.security-info {
+  text-align: center;
+  padding: 20px;
+}
+
+.security-description {
+  color: #7f8c8d;
+  margin-bottom: 20px;
+  line-height: 1.6;
+}
+
+.password-change-form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+/* Danger Zone */
+.danger-section {
+  border: 2px solid rgba(212, 165, 165, 0.3);
+  background: rgba(212, 165, 165, 0.05);
+}
+
+.danger-section .section-header {
+  border-bottom-color: rgba(212, 165, 165, 0.3);
+}
+
+.danger-section h2 {
+  color: #d4a5a5;
+}
+
+.danger-info {
+  text-align: center;
+  padding: 20px;
+}
+
+.danger-info p {
+  color: #7f8c8d;
+  margin-bottom: 20px;
+  line-height: 1.6;
+}
+
+.delete-account-btn {
+  background: linear-gradient(135deg, #d4a5a5, #e0b5b5);
+  color: white;
+  border: none;
+  padding: 12px 28px;
+  border-radius: 10px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.delete-account-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(212, 165, 165, 0.4);
+  background: linear-gradient(135deg, #c99595, #d4a5a5);
+}
+
+/* Animations */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 /* Responsive Design */
 @media (max-width: 768px) {
   .account-page {
-    padding: 20px 16px;
-  }
-
-  .account-container {
-    padding-top: 20px;
+    padding: 60px 15px 30px;
   }
 
   .account-header h1 {
     font-size: 2rem;
   }
 
-  .account-header p {
-    font-size: 1rem;
+  .account-section {
+    padding: 20px;
   }
 
-  .account-card {
-    padding: 24px;
-  }
-
-  .account-section h2 {
+  .section-header h2 {
     font-size: 1.5rem;
   }
 
-  .info-grid {
+  .info-grid,
+  .detail-grid {
     grid-template-columns: 1fr;
-    gap: 16px;
   }
 
   .action-buttons {
-    grid-template-columns: 1fr;
+    flex-direction: column;
+  }
+
+  .save-btn,
+  .cancel-btn,
+  .change-password-btn,
+  .delete-account-btn {
+    width: 100%;
   }
 }
