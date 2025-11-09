@@ -1,5 +1,7 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useAuth } from '../contexts/AuthContext';
+import { getUserRecordings } from '../services/recordingsService';
+import { getUserProfile } from '../services/userService';
 import './AccountPage.css';
 import ProfileMenu from '../components/ProfileMenu';
 import ReturnToPracticeButton from '../components/ReturnToPracticeButton';
@@ -14,6 +16,7 @@ function AccountPage() {
   const { currentUser } = useAuth();
   const [isEditing, setIsEditing] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
+  const [loading, setLoading] = useState(true);
   
   // User data state
   const [userData, setUserData] = useState({
@@ -25,7 +28,45 @@ function AccountPage() {
     createdAt: currentUser?.metadata?.creationTime || new Date().toISOString(),
     lastSignIn: currentUser?.metadata?.lastSignInTime || new Date().toISOString(),
     totalRecordings: 0,
+    averageScore: 0,
   });
+
+  // Fetch user data and recordings on mount
+  useEffect(() => {
+    const fetchUserData = async () => {
+      if (!currentUser?.uid) return;
+      
+      try {
+        setLoading(true);
+        
+        // Fetch user profile from Firestore
+        const profile = await getUserProfile(currentUser.uid);
+        
+        // Fetch recordings to get count and calculate average
+        const recordings = await getUserRecordings(currentUser.uid, 100);
+        
+        const totalRecordings = recordings.length;
+        const averageScore = totalRecordings > 0
+          ? recordings.reduce((sum, rec) => sum + (rec.score || 0), 0) / totalRecordings
+          : 0;
+        
+        setUserData(prev => ({
+          ...prev,
+          name: profile?.displayName || currentUser.displayName || 'User',
+          email: profile?.email || currentUser.email || 'Not available',
+          totalRecordings,
+          averageScore,
+        }));
+        
+      } catch (error) {
+        console.error('[AccountPage] Error fetching user data:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+    
+    fetchUserData();
+  }, [currentUser]);
 
   const [passwordData, setPasswordData] = useState({
     currentPassword: '',
@@ -220,8 +261,19 @@ function AccountPage() {
 
               <div className="detail-item">
                 <div className="detail-label">Total Recordings</div>
-                <div className="detail-value highlight">{userData.totalRecordings}</div>
+                <div className="detail-value highlight">
+                  {loading ? 'Loading...' : userData.totalRecordings}
+                </div>
               </div>
+
+              {!loading && userData.averageScore > 0 && (
+                <div className="detail-item">
+                  <div className="detail-label">Average Score</div>
+                  <div className="detail-value highlight">
+                    {userData.averageScore.toFixed(1)}/10
+                  </div>
+                </div>
+              )}
             </div>
           </div>
         </div>

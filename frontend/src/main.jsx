@@ -12,6 +12,7 @@ import AccountPage from "./pages/AccountPage";
 import RecordingsPage from "./pages/RecordingsPage";
 import SettingsPage from "./pages/SettingsPage";
 import ProgressPage from "./pages/ProgressPage";
+import DatabaseTest from "./pages/DatabaseTest";
 import Auth from "./pages/Auth";
 import ProtectedRoute from "./components/ProtectedRoute";
 import { AuthProvider } from "./contexts/AuthContext";
@@ -69,6 +70,14 @@ createRoot(document.getElementById("root")).render(
             element={
               <ProtectedRoute>
                 <SettingsPage />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/test-database"
+            element={
+              <ProtectedRoute>
+                <DatabaseTest />
               </ProtectedRoute>
             }
           />

@@ -275,8 +275,16 @@ h1::after {
   flex-direction: column;
   gap: 15px;
   flex: 1;
-  overflow: hidden;
+  overflow-y: auto;
+  overflow-x: hidden;
   min-height: 0;
+  padding: 20px;
+}
+
+.feedback-container {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
 }
 
 /* Main Content Column - Full Width */

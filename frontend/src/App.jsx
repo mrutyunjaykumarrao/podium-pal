@@ -33,6 +33,12 @@ function App() {
 
   // Handlers
   const handleRecordingClick = (recording) => {
+    console.log('[App] Recording clicked:', recording);
+    console.log('[App] Feedback data:', recording.feedback);
+    console.log('[App] Feedback keys:', recording.feedback ? Object.keys(recording.feedback) : 'no feedback');
+    console.log('[App] Has clarityScore?', recording.feedback?.clarityScore);
+    console.log('[App] Has strengths?', recording.feedback?.strengths);
+    console.log('[App] Has improvements?', recording.feedback?.improvements);
     setFeedback(recording.feedback);
     setUserGoal(recording.goal);
   };
@@ -51,7 +57,7 @@ function App() {
         {/* Collapsible Sidebar - Left */}
         <CollapsibleSidebar
           recordings={recordingHistory}
-          onRecordingClick={handleRecordingClick}
+          onSelectRecording={handleRecordingClick}
           onDeleteRecording={deleteRecording}
           onTogglePin={togglePin}
         />
@@ -81,7 +87,7 @@ function App() {
                 <button onClick={handleNewRecording} className="new-recording-btn">
                   + New Recording
                 </button>
-                <FeedbackReport feedback={feedback} />
+                <FeedbackReport data={feedback} />
               </div>
             </main>
           )}

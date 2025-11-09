@@ -1,37 +1,41 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useAuth } from '../contexts/AuthContext';
+import { getUserRecordings } from '../services/recordingsService';
 import ProfileMenu from '../components/ProfileMenu';
 import ReturnToPracticeButton from '../components/ReturnToPracticeButton';
 import './RecordingsPage.css';
 
 function RecordingsPage() {
+  const { currentUser } = useAuth();
   const [recordings, setRecordings] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const navigate = useNavigate();
 
   useEffect(() => {
-    fetchRecordings();
-  }, []);
-
-  const fetchRecordings = async () => {
-    try {
-      const response = await fetch('http://localhost:8000/recordings');
-      if (!response.ok) {
-        throw new Error('Failed to fetch recordings');
+    const fetchRecordings = async () => {
+      if (!currentUser?.uid) {
+        setLoading(false);
+        return;
       }
-      const data = await response.json();
-      // Sort by date, newest first
-      const sorted = data.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
-      setRecordings(sorted);
-      setError(null);
-    } catch (err) {
-      console.error('Error fetching recordings:', err);
-      setError(err.message);
-    } finally {
-      setLoading(false);
-    }
-  };
+
+      try {
+        console.log('[RecordingsPage] Fetching recordings from Firestore...');
+        const data = await getUserRecordings(currentUser.uid, 50);
+        console.log('[RecordingsPage] Fetched', data.length, 'recordings');
+        setRecordings(data);
+        setError(null);
+      } catch (err) {
+        console.error('[RecordingsPage] Error fetching recordings:', err);
+        setError(err.message);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchRecordings();
+  }, [currentUser]);
 
   const handleRecordingClick = (sessionId) => {
     navigate(`/feedback/${sessionId}`);
@@ -74,7 +78,7 @@ function RecordingsPage() {
         {error && (
           <div className="error-message">
             <p>Error: {error}</p>
-            <button onClick={fetchRecordings}>Retry</button>
+            <button onClick={() => window.location.reload()}>Retry</button>
           </div>
         )}
 
@@ -91,9 +95,9 @@ function RecordingsPage() {
           <div className="recordings-grid">
             {recordings.map((recording, index) => (
               <div 
-                key={recording.session_id} 
+                key={recording.sessionId || recording.id} 
                 className="recording-card"
-                onClick={() => handleRecordingClick(recording.session_id)}
+                onClick={() => handleRecordingClick(recording.sessionId || recording.id)}
               >
                 <div className="card-header">
                   <div className="card-number">#{recordings.length - index}</div>
@@ -105,13 +109,18 @@ function RecordingsPage() {
                   <div className="card-stats">
                     <div className="stat">
                       <span className="stat-icon">⭐</span>
-                      <span className="stat-value">{recording.overall_score || 'N/A'}</span>
+                      <span className="stat-value">{recording.score?.toFixed(1) || 'N/A'}</span>
                       <span className="stat-label">Score</span>
                     </div>
                     <div className="stat">
-                      <span className="stat-icon">🎯</span>
-                      <span className="stat-value">{recording.ai_personality || 'N/A'}</span>
-                      <span className="stat-label">Style</span>
+                      <span className="stat-icon">📝</span>
+                      <span className="stat-value">{recording.wordCount || 0}</span>
+                      <span className="stat-label">Words</span>
+                    </div>
+                    <div className="stat">
+                      <span className="stat-icon">⏱️</span>
+                      <span className="stat-value">{Math.floor((recording.duration || 0) / 60)}:{String((recording.duration || 0) % 60).padStart(2, '0')}</span>
+                      <span className="stat-label">Duration</span>
                     </div>
                   </div>
                 </div>

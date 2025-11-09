@@ -1,64 +1,78 @@
 import { useState, useEffect, useCallback } from 'react';
+import { getUserRecordings, deleteRecording as deleteRecordingFromDB } from '../services/recordingsService';
+import { useAuth } from '../contexts/AuthContext';
 
 /**
  * Custom hook for managing recording history
- * Handles localStorage operations for recording data
- * Database-ready: Easy to swap localStorage with API calls
+ * Fetches recordings from Firestore database
  */
 export const useRecordingHistory = () => {
+  const { currentUser } = useAuth();
   const [recordingHistory, setRecordingHistory] = useState([]);
+  const [loading, setLoading] = useState(true);
 
-  // Load recording history from localStorage on mount
+  // Load recording history from Firestore on mount
   useEffect(() => {
-    const savedHistory = localStorage.getItem('podiumPalHistory');
-    if (savedHistory) {
+    const fetchRecordings = async () => {
+      if (!currentUser?.uid) {
+        setLoading(false);
+        return;
+      }
+
       try {
-        const history = JSON.parse(savedHistory);
+        console.log('[useRecordingHistory] Fetching recordings from Firestore...');
+        const recordings = await getUserRecordings(currentUser.uid, 10);
+        
         // Sort: pinned items first, then by timestamp
-        history.sort((a, b) => {
+        recordings.sort((a, b) => {
           if (a.isPinned && !b.isPinned) return -1;
           if (!a.isPinned && b.isPinned) return 1;
           return new Date(b.timestamp) - new Date(a.timestamp);
         });
-        setRecordingHistory(history);
-      } catch (e) {
-        console.error('Failed to load recording history:', e);
+        
+        setRecordingHistory(recordings);
+        console.log('[useRecordingHistory] Loaded', recordings.length, 'recordings');
+      } catch (error) {
+        console.error('[useRecordingHistory] Failed to load recording history:', error);
+      } finally {
+        setLoading(false);
       }
-    }
-  }, []);
+    };
 
-  // Save recording to history
+    fetchRecordings();
+  }, [currentUser]);
+
+  // Save recording to history (no-op now, as recordings are saved in FeedbackPage)
   const saveToHistory = useCallback(
     (recordingData) => {
-      const newRecording = {
-        id: Date.now(),
-        timestamp: new Date().toISOString(),
-        isPinned: false,
-        ...recordingData,
-      };
-
-      const updatedHistory = [newRecording, ...recordingHistory].slice(0, 10); // Keep last 10
-      setRecordingHistory(updatedHistory);
-      localStorage.setItem('podiumPalHistory', JSON.stringify(updatedHistory));
-      
-      return newRecording;
+      // Recordings are now saved to Firestore in FeedbackPage
+      // This function kept for compatibility but doesn't do anything
+      console.log('[useRecordingHistory] saveToHistory called (handled by FeedbackPage)');
+      return recordingData;
     },
-    [recordingHistory]
+    []
   );
 
   // Delete recording from history
   const deleteRecording = useCallback(
-    (recordingId, e) => {
+    async (recordingId, e) => {
       if (e) e.stopPropagation(); // Prevent triggering the click to view
       
-      const updatedHistory = recordingHistory.filter((r) => r.id !== recordingId);
-      setRecordingHistory(updatedHistory);
-      localStorage.setItem('podiumPalHistory', JSON.stringify(updatedHistory));
+      if (!currentUser?.uid) return;
+      
+      try {
+        await deleteRecordingFromDB(currentUser.uid, recordingId);
+        const updatedHistory = recordingHistory.filter((r) => r.id !== recordingId);
+        setRecordingHistory(updatedHistory);
+        console.log('[useRecordingHistory] Recording deleted:', recordingId);
+      } catch (error) {
+        console.error('[useRecordingHistory] Failed to delete recording:', error);
+      }
     },
-    [recordingHistory]
+    [recordingHistory, currentUser]
   );
 
-  // Toggle pin status
+  // Toggle pin status (simplified - just local state for now)
   const togglePin = useCallback(
     (recordingId, e) => {
       if (e) e.stopPropagation(); // Prevent triggering the click to view
@@ -75,7 +89,7 @@ export const useRecordingHistory = () => {
       });
       
       setRecordingHistory(updatedHistory);
-      localStorage.setItem('podiumPalHistory', JSON.stringify(updatedHistory));
+      console.log('[useRecordingHistory] Pin toggled for:', recordingId);
     },
     [recordingHistory]
   );

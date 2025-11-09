@@ -63,44 +63,36 @@ const CollapsibleSidebar = ({
 
   return (
     <aside className={`collapsible-sidebar ${isCollapsed ? 'collapsed' : 'expanded'}`}>
-      {/* Toggle Button */}
-      <button 
-        className="sidebar-toggle-btn"
-        onClick={toggleSidebar}
-        aria-label={isCollapsed ? "Expand sidebar" : "Collapse sidebar"}
-        title={isCollapsed ? "Expand sidebar (⌘B)" : "Collapse sidebar (⌘B)"}
-      >
-        <svg 
-          className="sidebar-toggle-icon"
-          width="20" 
-          height="20" 
-          viewBox="0 0 24 24" 
-          fill="none" 
-          stroke="currentColor" 
-          strokeWidth="2"
-        >
-          <line x1="3" y1="6" x2="21" y2="6"></line>
-          <line x1="3" y1="12" x2="21" y2="12"></line>
-          <line x1="3" y1="18" x2="21" y2="18"></line>
-        </svg>
-      </button>
-
       {/* Sidebar Header */}
-      <div className="sidebar-header">
+      <div className="sidebar-header" onClick={toggleSidebar} style={{ cursor: 'pointer' }}>
         {!isCollapsed && (
           <>
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-              <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
-              <rect x="9" y="9" width="6" height="7"></rect>
-            </svg>
             <h3>Recent Recordings</h3>
+            <button 
+              className="sidebar-header-toggle"
+              aria-label="Collapse sidebar"
+              title="Collapse sidebar (⌘B)"
+            >
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                <line x1="3" y1="6" x2="21" y2="6"></line>
+                <line x1="3" y1="12" x2="21" y2="12"></line>
+                <line x1="3" y1="18" x2="21" y2="18"></line>
+              </svg>
+            </button>
           </>
         )}
         {isCollapsed && (
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-            <circle cx="12" cy="12" r="3"></circle>
-            <path d="M12 1v6m0 6v6"></path>
-          </svg>
+          <button 
+            className="sidebar-header-toggle"
+            aria-label="Expand sidebar"
+            title="Expand sidebar (⌘B)"
+          >
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+              <line x1="3" y1="6" x2="21" y2="6"></line>
+              <line x1="3" y1="12" x2="21" y2="12"></line>
+              <line x1="3" y1="18" x2="21" y2="18"></line>
+            </svg>
+          </button>
         )}
       </div>
 
@@ -119,72 +111,53 @@ const CollapsibleSidebar = ({
           </div>
         )}
 
-        {recordings.map((recording) => (
+        {!isCollapsed && recordings.map((recording) => (
           <div
             key={recording.id}
-            className={`sidebar-recording-item ${recording.isPinned ? 'pinned' : ''} ${isCollapsed ? 'collapsed' : ''}`}
+            className={`sidebar-recording-item ${recording.isPinned ? 'pinned' : ''}`}
             onClick={() => onSelectRecording(recording)}
-            title={isCollapsed ? recording.title : ''}
           >
-            {isCollapsed ? (
-              // Collapsed view: Just show icon
-              <div className="sidebar-recording-icon">
-                {recording.isPinned ? '📌' : '🎤'}
+            <div className="sidebar-recording-header">
+              <div className="sidebar-recording-title">
+                {recording.goal || recording.title || 'Untitled Recording'}
               </div>
-            ) : (
-              // Expanded view: Full details
-              <>
-                <div className="sidebar-recording-header">
-                  <div className="sidebar-recording-title">
-                    {recording.title || 'Untitled Recording'}
-                  </div>
-                  <div className="sidebar-recording-actions">
-                    <button
-                      className={`sidebar-pin-btn ${recording.isPinned ? 'pinned' : ''}`}
-                      onClick={(e) => onTogglePin(recording.id, e)}
-                      aria-label={recording.isPinned ? "Unpin" : "Pin"}
-                      title={recording.isPinned ? "Unpin" : "Pin"}
-                    >
-                      {recording.isPinned ? '📌' : '📍'}
-                    </button>
-                    <button
-                      className="sidebar-delete-btn"
-                      onClick={(e) => onDeleteRecording(recording.id, e)}
-                      aria-label="Delete"
-                      title="Delete"
-                    >
-                      🗑️
-                    </button>
-                  </div>
-                </div>
+              <div className="sidebar-recording-actions">
+                <button
+                  className={`sidebar-pin-btn ${recording.isPinned ? 'pinned' : ''}`}
+                  onClick={(e) => onTogglePin(recording.id, e)}
+                  aria-label={recording.isPinned ? "Unpin" : "Pin"}
+                  title={recording.isPinned ? "Unpin" : "Pin"}
+                >
+                  {recording.isPinned ? '📌' : '📍'}
+                </button>
+                <button
+                  className="sidebar-delete-btn"
+                  onClick={(e) => onDeleteRecording(recording.id, e)}
+                  aria-label="Delete"
+                  title="Delete"
+                >
+                  🗑️
+                </button>
+              </div>
+            </div>
 
-                <div className="sidebar-recording-meta">
-                  {formatTimestamp(recording.timestamp)} • {formatDuration(recording.duration || 0)}
-                </div>
+            <div className="sidebar-recording-meta">
+              {formatTimestamp(recording.timestamp)} • {formatDuration(recording.duration || 0)}
+            </div>
 
-                {recording.stats && (
-                  <div className="sidebar-recording-stats">
-                    <span className="stat-badge">
-                      {recording.stats.wordCount || 0} words
-                    </span>
-                    <span className="stat-badge">
-                      {recording.stats.wpm || 0} WPM
-                    </span>
-                    {recording.stats.score !== undefined && (
-                      <span className="stat-badge score">
-                        {recording.stats.score}/10
-                      </span>
-                    )}
-                  </div>
-                )}
-
-                {recording.preview && (
-                  <div className="sidebar-recording-preview">
-                    {recording.preview}
-                  </div>
-                )}
-              </>
-            )}
+            <div className="sidebar-recording-stats">
+              <span className="stat-badge">
+                {recording.wordCount || 0} words
+              </span>
+              <span className="stat-badge">
+                {recording.wpm || 0} WPM
+              </span>
+              {recording.score !== undefined && (
+                <span className="stat-badge score">
+                  {recording.score.toFixed(1)}/10
+                </span>
+              )}
+            </div>
           </div>
         ))}
       </div>

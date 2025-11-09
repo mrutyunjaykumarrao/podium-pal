@@ -64,7 +64,6 @@ export default function ProgressiveInput({
             <MicrophoneIcon size={40} />
             Podium Pal
           </h1>
-          <p className="app-subtitle">Your Personal AI Public Speaking Coach</p>
         </header>
 
         <div className="goal-input-box">

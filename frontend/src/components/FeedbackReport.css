@@ -74,9 +74,9 @@
 }
 
 .hero-card {
-  background: linear-gradient(135deg, rgba(168, 197, 209, 0.08), rgba(184, 212, 200, 0.08));
+  background: rgba(30, 41, 59, 0.8);
   backdrop-filter: blur(20px);
-  border: 2px solid rgba(168, 197, 209, 0.2);
+  border: 2px solid rgba(168, 197, 209, 0.3);
   border-radius: 24px;
   padding: 32px;
   display: flex;
@@ -85,8 +85,8 @@
   justify-content: center;
   gap: 20px;
   box-shadow: 
-    0 20px 60px rgba(0, 0, 0, 0.15),
-    0 0 40px rgba(168, 197, 209, 0.08);
+    0 20px 60px rgba(0, 0, 0, 0.3),
+    0 0 40px rgba(168, 197, 209, 0.15);
   position: relative;
   overflow: hidden;
   min-width: 280px;
@@ -96,7 +96,7 @@
   content: '';
   position: absolute;
   inset: 0;
-  background: radial-gradient(circle at 50% 0%, rgba(168, 197, 209, 0.12), transparent 70%);
+  background: radial-gradient(circle at 50% 0%, rgba(168, 197, 209, 0.15), transparent 70%);
   pointer-events: none;
 }
 
@@ -185,9 +185,9 @@
 }
 
 .stat-card {
-  background: linear-gradient(135deg, rgba(168, 197, 209, 0.08), rgba(184, 212, 200, 0.08));
+  background: rgba(30, 41, 59, 0.8) !important;
   backdrop-filter: blur(10px);
-  border: 1px solid rgba(168, 197, 209, 0.15);
+  border: 1px solid rgba(168, 197, 209, 0.25);
   border-radius: 16px;
   padding: 20px;
   display: flex;
@@ -199,8 +199,9 @@
 
 .stat-card:hover {
   transform: translateY(-4px);
-  border-color: rgba(168, 197, 209, 0.3);
-  box-shadow: 0 12px 24px rgba(168, 197, 209, 0.15);
+  border-color: rgba(168, 197, 209, 0.4);
+  box-shadow: 0 12px 24px rgba(168, 197, 209, 0.25);
+  background: rgba(30, 41, 59, 0.9) !important;
 }
 
 .stat-icon {
@@ -269,9 +270,9 @@
 }
 
 .metric-card-modern {
-  background: linear-gradient(135deg, rgba(168, 197, 209, 0.08), rgba(184, 212, 200, 0.08));
+  background: rgba(30, 41, 59, 0.8) !important;
   backdrop-filter: blur(10px);
-  border: 1px solid rgba(168, 197, 209, 0.2);
+  border: 1px solid rgba(168, 197, 209, 0.25);
   border-radius: 16px;
   padding: 24px;
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
@@ -293,8 +294,9 @@
 
 .metric-card-modern:hover {
   transform: translateY(-6px);
-  border-color: rgba(168, 197, 209, 0.4);
-  box-shadow: 0 12px 32px rgba(168, 197, 209, 0.2);
+  border-color: rgba(168, 197, 209, 0.5);
+  box-shadow: 0 12px 32px rgba(168, 197, 209, 0.3);
+  background: rgba(30, 41, 59, 0.9) !important;
 }
 
 .metric-card-modern:hover::before {
@@ -393,17 +395,18 @@
 }
 
 .insight-panel {
-  background: linear-gradient(135deg, rgba(168, 197, 209, 0.08), rgba(184, 212, 200, 0.08));
+  background: rgba(30, 41, 59, 0.8) !important;
   backdrop-filter: blur(10px);
-  border: 1px solid rgba(168, 197, 209, 0.15);
+  border: 1px solid rgba(168, 197, 209, 0.25);
   border-radius: 16px;
   padding: 24px;
   transition: all 0.3s ease;
 }
 
 .insight-panel:hover {
-  border-color: rgba(168, 197, 209, 0.3);
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+  border-color: rgba(168, 197, 209, 0.4);
+  box-shadow: 0 8px 24px rgba(168, 197, 209, 0.2);
+  background: rgba(30, 41, 59, 0.9) !important;
 }
 
 .panel-header {
@@ -511,9 +514,9 @@
 
 /* Analysis Cards */
 .analysis-card {
-  background: linear-gradient(135deg, rgba(168, 197, 209, 0.08), rgba(184, 212, 200, 0.08));
+  background: rgba(30, 41, 59, 0.8) !important;
   backdrop-filter: blur(10px);
-  border: 1px solid rgba(168, 197, 209, 0.15);
+  border: 1px solid rgba(168, 197, 209, 0.25);
   border-radius: 16px;
   padding: 24px;
   margin-bottom: 24px;
@@ -521,8 +524,9 @@
 }
 
 .analysis-card:hover {
-  border-color: rgba(168, 197, 209, 0.3);
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+  border-color: rgba(168, 197, 209, 0.4);
+  box-shadow: 0 8px 24px rgba(168, 197, 209, 0.2);
+  background: rgba(30, 41, 59, 0.9) !important;
 }
 
 .card-header {

@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useAuth } from '../contexts/AuthContext';
-import NavMenu from '../components/NavMenu';
+import ProfileMenu from '../components/ProfileMenu';
+import ReturnToPracticeButton from '../components/ReturnToPracticeButton';
 import { getUserRecordings, getUserStats } from '../services/recordingsService';
 import { getUserProfile } from '../services/userService';
 import { 
@@ -183,7 +184,8 @@ function ProgressPage() {
 
   return (
     <div className="progress-page">
-      <NavMenu />
+      <ProfileMenu />
+      <ReturnToPracticeButton />
       <div className="progress-header">
         <h1>Your Progress Journey</h1>
         <p className="subtitle">Track your improvement over time</p>
