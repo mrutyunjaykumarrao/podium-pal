@@ -1,9 +1,11 @@
 import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import FeedbackReport from "../components/FeedbackReport";
-import NavMenu from "../components/NavMenu";
+import ProfileMenu from "../components/ProfileMenu";
+import ReturnToPracticeButton from "../components/ReturnToPracticeButton";
 import { useAuth } from "../contexts/AuthContext";
 import { saveRecording } from "../services/recordingsService";
+import "./FeedbackPage.css";
 
 function FeedbackPage() {
   const { id } = useParams();
@@ -143,9 +145,9 @@ function FeedbackPage() {
     );
 
   return (
-    <div style={{ padding: 20 }}>
-      <NavMenu />
-      <h1>Feedback for session: {id}</h1>
+    <div className="feedback-page-container">
+      <ProfileMenu />
+      <ReturnToPracticeButton />
       <FeedbackReport data={data} />
     </div>
   );
