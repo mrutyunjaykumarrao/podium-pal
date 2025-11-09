@@ -1,0 +1,30 @@
+{
+  "sessionId": "0a2e9ee0-1821-44df-8a6e-18d03824e83c",
+  "timestamp": "2025-11-09T00:28:48.336125",
+  "transcript": "Hello, how are you? I'm fine, thank you.",
+  "userGoal": "hjrbvnfdkfjm",
+  "duration": 15,
+  "audioPath": "audio_recordings\\recording_20251109_002845.webm",
+  "feedback": {
+    "sessionId": "0a2e9ee0-1821-44df-8a6e-18d03824e83c",
+    "pace": 32,
+    "fillerWords": {},
+    "aiSummary": "The speaker provided a basic greeting and a polite response to an unasked question about their well-being.",
+    "clarityScore": 90,
+    "confidenceScore": 85,
+    "engagementScore": 20,
+    "structureScore": 70,
+    "overall_score": 5.5,
+    "constructiveTip": "While the greeting is clear, it lacks depth and doesn't engage the listener. To improve, try adding a personal touch or a question to initiate a more meaningful conversation. For example, you could ask about the listener's day or offer a brief observation about the environment.",
+    "strengths": [
+      "Clear pronunciation.",
+      "Polite and respectful tone.",
+      "Direct and concise language."
+    ],
+    "improvements": [
+      "Increase the length and depth of the interaction to be more engaging.",
+      "Add personal details or questions to initiate a conversation.",
+      "Vary tone and pacing to create interest."
+    ]
+  }
+}

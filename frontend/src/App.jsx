@@ -7,6 +7,7 @@ import {
 import "./App.css";
 import TranscriptDisplay from "./components/TranscriptDisplay";
 import FeedbackReport from "./components/FeedbackReport";
+import NavMenu from "./components/NavMenu";
 import { useAuth } from "./contexts/AuthContext";
 import { useNavigate } from "react-router-dom";
 import {
@@ -27,6 +28,7 @@ function App() {
   const [isRecording, setIsRecording] = useState(false);
   const [transcript, setTranscript] = useState("");
   const [userGoal, setUserGoal] = useState("");
+  const [aiPersonality, setAiPersonality] = useState("supportive"); // New: AI personality
   const [statusText, setStatusText] = useState(
     "Ready to record"
   );
@@ -174,6 +176,7 @@ function App() {
       const formData = new FormData();
       formData.append("transcript", transcriptText);
       formData.append("userGoal", goalToUse);
+      formData.append("aiPersonality", aiPersonality); // Send AI personality
       formData.append("duration", duration.toString()); // Send actual duration in seconds
 
       // Add audio file only if it has data
@@ -263,7 +266,7 @@ function App() {
         );
       }
     },
-    [userGoal, saveToHistory]
+    [aiPersonality, saveToHistory]
   );
 
   // ========================================
@@ -773,62 +776,101 @@ function App() {
   };
 
   return (
-    <div className="app-container">
-      <div className="app">
-        <header className="header">
-          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', width: '100%' }}>
-            <div>
-              <h1>
-                <MicrophoneIcon size={32} />
-                <span style={{ marginLeft: "12px" }}>
-                  Podium Pal
-                </span>
-              </h1>
-              <p className="tagline">
-                Your Personal AI Public Speaking Coach
-              </p>
-            </div>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '15px' }}>
-              <div style={{ textAlign: 'right' }}>
-                <p style={{ margin: 0, fontSize: '0.9rem', color: '#666' }}>
-                  {currentUser?.displayName || currentUser?.email}
-                </p>
-                {currentUser?.displayName && (
-                  <p style={{ margin: 0, fontSize: '0.8rem', color: '#999' }}>
-                    {currentUser?.email}
-                  </p>
-                )}
-              </div>
-              <button 
-                onClick={handleLogout}
-                style={{
-                  padding: '8px 16px',
-                  borderRadius: '6px',
-                  border: '1px solid #ddd',
-                  background: 'white',
-                  cursor: 'pointer',
-                  fontSize: '0.9rem',
-                  transition: 'all 0.2s'
-                }}
-                onMouseEnter={(e) => {
-                  e.target.style.background = '#f5f5f5';
-                  e.target.style.borderColor = '#999';
-                }}
-                onMouseLeave={(e) => {
-                  e.target.style.background = 'white';
-                  e.target.style.borderColor = '#ddd';
-                }}
-              >
-                Logout
-              </button>
-            </div>
+    <>
+      <div className="app-container">
+        <NavMenu />
+        
+        {/* Left Sidebar - Recent Recordings */}
+        <div className="recordings-sidebar">
+          <div className="sidebar-header">
+            <h3>
+              <FileTextIcon size={20} style={{ verticalAlign: "middle", marginRight: "8px" }} />
+              Recent Recordings
+            </h3>
           </div>
+          <div className="sidebar-recordings-list">
+            {recordingHistory.length > 0 ? (
+              <>
+                {recordingHistory.map((recording, index) => {
+                  const durationMin = Math.floor(recording.duration / 60);
+                  const durationSec = recording.duration % 60;
+                  const durationText = durationMin > 0
+                    ? `${durationMin}:${durationSec.toString().padStart(2, "0")} min`
+                    : `${durationSec}s`;
+
+                  return (
+                    <div
+                      key={recording.id}
+                      className={`sidebar-recording-item ${recording.isPinned ? "pinned" : ""}`}
+                      onClick={() => handleRecordingClick(recording)}
+                      role="button"
+                      tabIndex={0}
+                      onKeyPress={(e) => {
+                        if (e.key === "Enter" || e.key === " ") {
+                          handleRecordingClick(recording);
+                        }
+                      }}
+                    >
+                      <div className="sidebar-recording-header">
+                        <div className="sidebar-recording-title">
+                          {recording.isPinned && <span className="pin-indicator">📌 </span>}
+                          {recording.goal || "Speech Recording"}
+                        </div>
+                        <div className="sidebar-recording-actions">
+                          <button
+                            className={`sidebar-pin-btn ${recording.isPinned ? "pinned" : ""}`}
+                            onClick={(e) => togglePin(recording.id, e)}
+                            title={recording.isPinned ? "Unpin" : "Pin to top"}
+                            aria-label={recording.isPinned ? "Unpin recording" : "Pin recording"}
+                          >
+                            {recording.isPinned ? "📌" : "📍"}
+                          </button>
+                          <button
+                            className="sidebar-delete-btn"
+                            onClick={(e) => deleteRecording(recording.id, e)}
+                            title="Delete recording"
+                            aria-label="Delete recording"
+                          >
+                            🗑️
+                          </button>
+                        </div>
+                      </div>
+                      <div className="sidebar-recording-meta">
+                        {durationText} • {recording.wpm} WPM • {recording.score.toFixed(1)}/10
+                      </div>
+                      <div className="sidebar-recording-preview">
+                        {recording.transcriptPreview || recording.transcript}
+                      </div>
+                    </div>
+                  );
+                })}
+              </>
+            ) : (
+              <div className="sidebar-empty-state">
+                <p>🎤 No recordings yet</p>
+                <small>Start recording to see your history here</small>
+              </div>
+            )}
+          </div>
+        </div>
+
+        {/* Main Content Area */}
+        <div className="app">
+        <header className="header">
+          <h1>
+            <MicrophoneIcon size={32} />
+            <span style={{ marginLeft: "12px" }}>
+              Podium Pal
+            </span>
+          </h1>
+          <p className="tagline">
+            Your Personal AI Public Speaking Coach
+          </p>
         </header>
 
         <main className="main-content">
-          <div className="content-grid">
-            {/* Left Column - Main Controls */}
-            <div className="main-column">
+          {/* Main Controls */}
+          <div className="main-column">
               <div className="input-section">
                 <label htmlFor="userGoalInput">
                   <LightbulbIcon
@@ -873,6 +915,58 @@ function App() {
                     for better AI feedback
                   </small>
                 )}
+              </div>
+
+              {/* AI Personality Selector */}
+              <div className="input-group personality-selector-group">
+                <label htmlFor="personalitySelect">
+                  <SparklesIcon
+                    size={20}
+                    style={{
+                      verticalAlign: "middle",
+                      marginRight: "8px",
+                    }}
+                  />
+                  Choose your AI feedback style
+                </label>
+                <select
+                  id="personalitySelect"
+                  value={aiPersonality}
+                  onChange={(e) =>
+                    setAiPersonality(e.target.value)
+                  }
+                  disabled={isRecording}
+                  className="personality-select"
+                >
+                  <option value="supportive">
+                    🌱 Supportive - Encouraging and nurturing
+                  </option>
+                  <option value="direct">
+                    🎯 Direct - Straightforward and concise
+                  </option>
+                  <option value="critical">
+                    🔍 Critical - Detailed and analytical
+                  </option>
+                  <option value="humorous">
+                    😄 Humorous - Light-hearted and fun
+                  </option>
+                  <option value="mentor">
+                    🧘 Mentor - Wise and reflective
+                  </option>
+                  <option value="professional">
+                    💼 Professional - Formal and structured
+                  </option>
+                </select>
+                <small
+                  style={{
+                    color: "#a0a0a0",
+                    fontSize: "0.85rem",
+                    marginTop: "5px",
+                    display: "block",
+                  }}
+                >
+                  Select how you'd like to receive your feedback
+                </small>
               </div>
 
               <div className="recording-section">
@@ -1044,239 +1138,6 @@ function App() {
               )}
             </div>
 
-            {/* Right Column - Recent Recordings */}
-            {!feedback && (
-              <div className="sidebar-column">
-                <div className="recent-recordings-panel">
-                  <h3>
-                    <FileTextIcon
-                      size={20}
-                      style={{
-                        verticalAlign: "middle",
-                        marginRight: "8px",
-                      }}
-                    />
-                    Recent Recordings
-                  </h3>
-                  <div className="recordings-list">
-                    {recordingHistory.length > 0 ? (
-                      <>
-                        {recordingHistory.map(
-                          (recording, index) => {
-                            const durationMin = Math.floor(
-                              recording.duration / 60
-                            );
-                            const durationSec =
-                              recording.duration % 60;
-                            const durationText =
-                              durationMin > 0
-                                ? `${durationMin}:${durationSec
-                                    .toString()
-                                    .padStart(2, "0")} min`
-                                : `${durationSec}s`;
-
-                            const iconComponents = [
-                              MicrophoneIcon,
-                              TargetIcon,
-                              UsersIcon,
-                              BriefcaseIcon,
-                              ChartBarIcon,
-                              AwardIcon,
-                              StarIcon,
-                              LightbulbIcon,
-                            ];
-                            const IconComponent =
-                              iconComponents[
-                                index %
-                                  iconComponents.length
-                              ];
-
-                            return (
-                              <div
-                                key={recording.id}
-                                className={`recording-item ${
-                                  recording.isPinned
-                                    ? "pinned"
-                                    : ""
-                                }`}
-                                onClick={() =>
-                                  handleRecordingClick(
-                                    recording
-                                  )
-                                }
-                                role="button"
-                                tabIndex={0}
-                                onKeyPress={(e) => {
-                                  if (
-                                    e.key === "Enter" ||
-                                    e.key === " "
-                                  ) {
-                                    handleRecordingClick(
-                                      recording
-                                    );
-                                  }
-                                }}
-                              >
-                                <div className="recording-actions">
-                                  <button
-                                    className={`pin-btn ${
-                                      recording.isPinned
-                                        ? "pinned"
-                                        : ""
-                                    }`}
-                                    onClick={(e) =>
-                                      togglePin(
-                                        recording.id,
-                                        e
-                                      )
-                                    }
-                                    title={
-                                      recording.isPinned
-                                        ? "Unpin"
-                                        : "Pin to top"
-                                    }
-                                    aria-label={
-                                      recording.isPinned
-                                        ? "Unpin recording"
-                                        : "Pin recording"
-                                    }
-                                  >
-                                    {recording.isPinned
-                                      ? "📌"
-                                      : "📍"}
-                                  </button>
-                                  <button
-                                    className="delete-btn"
-                                    onClick={(e) =>
-                                      deleteRecording(
-                                        recording.id,
-                                        e
-                                      )
-                                    }
-                                    title="Delete recording"
-                                    aria-label="Delete recording"
-                                  >
-                                    🗑️
-                                  </button>
-                                </div>
-                                <div className="recording-header">
-                                  <span className="recording-icon">
-                                    <IconComponent
-                                      size={20}
-                                    />
-                                  </span>
-                                  <div className="recording-info">
-                                    <strong>
-                                      {recording.isPinned && (
-                                        <span className="pin-indicator">
-                                          📌{" "}
-                                        </span>
-                                      )}
-                                      {recording.goal ||
-                                        "Speech Recording"}
-                                    </strong>
-                                    <span className="recording-meta">
-                                      {durationText} •{" "}
-                                      {recording.wpm} WPM •{" "}
-                                      {recording.score.toFixed(
-                                        1
-                                      )}
-                                      /10
-                                    </span>
-                                  </div>
-                                </div>
-                                <p className="recording-preview">
-                                  {recording.transcriptPreview ||
-                                    recording.transcript}
-                                </p>
-                                <small className="click-hint">
-                                  Click to view full
-                                  analysis
-                                </small>
-                              </div>
-                            );
-                          }
-                        )}
-                      </>
-                    ) : (
-                      <>
-                        {/* Placeholder recordings when no history exists */}
-                        <div className="recording-item placeholder">
-                          <div className="recording-header">
-                            <span className="recording-icon">
-                              🎤
-                            </span>
-                            <div className="recording-info">
-                              <strong>
-                                Quarterly Results
-                                Presentation
-                              </strong>
-                              <span className="recording-meta">
-                                2 min • 152 WPM • 8.5/10
-                              </span>
-                            </div>
-                          </div>
-                          <p className="recording-preview">
-                            Presented Q4 financial results
-                            with strong revenue growth...
-                          </p>
-                        </div>
-
-                        <div className="recording-item placeholder">
-                          <div className="recording-header">
-                            <span className="recording-icon">
-                              �
-                            </span>
-                            <div className="recording-info">
-                              <strong>
-                                Product Launch Speech
-                              </strong>
-                              <span className="recording-meta">
-                                3 min • 145 WPM • 9.0/10
-                              </span>
-                            </div>
-                          </div>
-                          <p className="recording-preview">
-                            Introduced our new AI-powered
-                            analytics platform...
-                          </p>
-                        </div>
-
-                        <div className="recording-item placeholder">
-                          <div className="recording-header">
-                            <span className="recording-icon">
-                              👥
-                            </span>
-                            <div className="recording-info">
-                              <strong>
-                                Team Motivation Talk
-                              </strong>
-                              <span className="recording-meta">
-                                1.5 min • 138 WPM • 7.8/10
-                              </span>
-                            </div>
-                          </div>
-                          <p className="recording-preview">
-                            Encouraged team collaboration
-                            and innovation...
-                          </p>
-                        </div>
-
-                        <div className="empty-state">
-                          <p>
-                            🎬 These are example recordings.
-                            Your recordings will appear
-                            here!
-                          </p>
-                        </div>
-                      </>
-                    )}
-                  </div>
-                </div>
-              </div>
-            )}
-          </div>
-
           {feedback && (
             <>
               <div className="back-button-container">
@@ -1330,8 +1191,9 @@ function App() {
             🌐 Best experienced in Chrome or Edge
           </small>
         </footer>
+        </div>
       </div>
-    </div>
+    </>
   );
 }
 

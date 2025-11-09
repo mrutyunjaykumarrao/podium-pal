@@ -8,11 +8,15 @@ import {
 } from "react-router-dom";
 import App from "./App.jsx";
 import FeedbackPage from "./pages/FeedbackPage";
+import AccountPage from "./pages/AccountPage";
+import RecordingsPage from "./pages/RecordingsPage";
+import SettingsPage from "./pages/SettingsPage";
+import ProgressPage from "./pages/ProgressPage";
 import Auth from "./pages/Auth";
 import ProtectedRoute from "./components/ProtectedRoute";
 import { AuthProvider } from "./contexts/AuthContext";
 
-console.log('[Main] Initializing Podium Pal application');
+console.log("[Main] Initializing Podium Pal application");
 
 createRoot(document.getElementById("root")).render(
   <StrictMode>
@@ -33,6 +37,38 @@ createRoot(document.getElementById("root")).render(
             element={
               <ProtectedRoute>
                 <FeedbackPage />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/account"
+            element={
+              <ProtectedRoute>
+                <AccountPage />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/recordings"
+            element={
+              <ProtectedRoute>
+                <RecordingsPage />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/progress"
+            element={
+              <ProtectedRoute>
+                <ProgressPage />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/settings"
+            element={
+              <ProtectedRoute>
+                <SettingsPage />
               </ProtectedRoute>
             }
           />

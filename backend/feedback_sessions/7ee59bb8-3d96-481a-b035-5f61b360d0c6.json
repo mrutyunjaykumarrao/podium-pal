@@ -1,0 +1,29 @@
+{
+  "sessionId": "7ee59bb8-3d96-481a-b035-5f61b360d0c6",
+  "timestamp": "2025-11-09T03:53:52.600642",
+  "transcript": "hello hello",
+  "userGoal": "sdfsdfa",
+  "duration": 7,
+  "audioPath": "audio_recordings\\recording_20251109_035350.webm",
+  "feedback": {
+    "sessionId": "7ee59bb8-3d96-481a-b035-5f61b360d0c6",
+    "pace": 17,
+    "fillerWords": {},
+    "aiSummary": "The speaker uttered a brief greeting, \"hello hello.\"",
+    "clarityScore": 60,
+    "confidenceScore": 70,
+    "engagementScore": 50,
+    "structureScore": 40,
+    "overall_score": 5.5,
+    "constructiveTip": "To improve, focus on expanding your content and adding more structure. Consider practicing with a specific outline to guide your thoughts and provide a clearer message.",
+    "strengths": [
+      "The speaker made an attempt to speak.",
+      "Clear enunciation of the word 'hello'."
+    ],
+    "improvements": [
+      "Increase the length of the speech.",
+      "Develop a clear message or topic.",
+      "Add supporting details and structure beyond a simple greeting."
+    ]
+  }
+}
