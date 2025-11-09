@@ -1,10 +1,15 @@
-/* Settings Page Styles - Meditative Theme */
+/* Settings Page Styles - Dark Navy Theme (Matching Home) */
 
 .settings-page {
   min-height: 100vh;
-  background: linear-gradient(135deg, #f8faf9 0%, #eef5f2 100%);
+  background: 
+    radial-gradient(circle at 20% 50%, rgba(108, 92, 231, 0.1) 0%, transparent 50%),
+    radial-gradient(circle at 80% 80%, rgba(162, 155, 254, 0.1) 0%, transparent 50%),
+    linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f1523 100%);
+  background-attachment: fixed;
   padding: 40px 20px;
   overflow-y: auto;
+  color: #e0e0e0;
 }
 
 .settings-container {
@@ -21,31 +26,34 @@
 .settings-header h1 {
   font-family: 'Crimson Text', serif;
   font-size: 2.5rem;
-  color: #2d3748;
   margin: 0 0 12px 0;
   font-weight: 600;
+  background: linear-gradient(135deg, #7c9aee 0%, #8b7fda 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
 }
 
 .settings-header p {
   font-family: 'Lato', sans-serif;
   font-size: 1.1rem;
-  color: #718096;
+  color: #a0aec0;
   margin: 0;
 }
 
 .settings-card {
-  background: rgba(255, 255, 255, 0.95);
+  background: rgba(26, 26, 46, 0.8);
   backdrop-filter: blur(10px);
   border-radius: 20px;
   padding: 40px;
-  box-shadow: 0 8px 32px rgba(143, 185, 168, 0.15);
-  border: 1px solid rgba(143, 185, 168, 0.2);
+  box-shadow: 0 8px 32px rgba(108, 92, 231, 0.15);
+  border: 1px solid rgba(124, 154, 238, 0.2);
 }
 
 .settings-section {
   margin-bottom: 40px;
   padding-bottom: 32px;
-  border-bottom: 1px solid rgba(143, 185, 168, 0.15);
+  border-bottom: 1px solid rgba(124, 154, 238, 0.15);
 }
 
 .settings-section:last-of-type {
@@ -55,7 +63,7 @@
 .settings-section h2 {
   font-family: 'Crimson Text', serif;
   font-size: 1.6rem;
-  color: #8fb9a8;
+  color: #7c9aee;
   margin: 0 0 24px 0;
 }
 
@@ -71,7 +79,7 @@
   display: block;
   font-family: 'Lato', sans-serif;
   font-size: 0.95rem;
-  color: #2d3748;
+  color: #a8c5d1;
   font-weight: 600;
   margin-bottom: 8px;
 }
@@ -79,10 +87,10 @@
 .setting-item select {
   width: 100%;
   padding: 12px 16px;
-  border: 2px solid rgba(143, 185, 168, 0.2);
+  border: 2px solid rgba(124, 154, 238, 0.2);
   border-radius: 10px;
-  background: rgba(255, 255, 255, 0.8);
-  color: #2d3748;
+  background: rgba(22, 33, 62, 0.5);
+  color: #e0e0e0;
   font-family: 'Lato', sans-serif;
   font-size: 1rem;
   cursor: pointer;
@@ -90,13 +98,14 @@
 }
 
 .setting-item select:hover {
-  border-color: rgba(143, 185, 168, 0.4);
+  border-color: rgba(124, 154, 238, 0.4);
+  background: rgba(22, 33, 62, 0.7);
 }
 
 .setting-item select:focus {
   outline: none;
-  border-color: #8fb9a8;
-  box-shadow: 0 0 0 3px rgba(143, 185, 168, 0.1);
+  border-color: #7c9aee;
+  box-shadow: 0 0 0 3px rgba(124, 154, 238, 0.1);
 }
 
 .checkbox-item {
@@ -105,25 +114,26 @@
   gap: 12px;
   padding: 12px;
   border-radius: 10px;
-  background: linear-gradient(135deg, rgba(143, 185, 168, 0.05), rgba(168, 197, 209, 0.05));
+  background: rgba(124, 154, 238, 0.05);
   transition: all 0.2s ease;
 }
 
 .checkbox-item:hover {
-  background: linear-gradient(135deg, rgba(143, 185, 168, 0.1), rgba(168, 197, 209, 0.1));
+  background: rgba(124, 154, 238, 0.1);
 }
 
 .checkbox-item input[type="checkbox"] {
   width: 20px;
   height: 20px;
   cursor: pointer;
-  accent-color: #8fb9a8;
+  accent-color: #7c9aee;
 }
 
 .checkbox-item label {
   margin: 0;
   cursor: pointer;
   flex: 1;
+  color: #e0e0e0;
 }
 
 .settings-actions {
@@ -131,7 +141,7 @@
   gap: 16px;
   margin-top: 40px;
   padding-top: 32px;
-  border-top: 2px solid rgba(143, 185, 168, 0.15);
+  border-top: 2px solid rgba(124, 154, 238, 0.15);
 }
 
 .save-btn,
@@ -148,23 +158,27 @@
 }
 
 .save-btn {
-  background: linear-gradient(135deg, #8fb9a8, #a8c5d1);
+  background: linear-gradient(135deg, #7c9aee, #8b7fda);
   color: white;
+  border: 2px solid transparent;
 }
 
 .save-btn:hover {
   transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(143, 185, 168, 0.3);
+  box-shadow: 0 6px 20px rgba(124, 154, 238, 0.4);
+  border-color: rgba(124, 154, 238, 0.3);
 }
 
 .reset-btn {
-  background: linear-gradient(135deg, rgba(143, 185, 168, 0.15), rgba(168, 197, 209, 0.15));
-  color: #718096;
+  background: rgba(124, 154, 238, 0.15);
+  color: #a8c5d1;
+  border: 2px solid rgba(124, 154, 238, 0.2);
 }
 
 .reset-btn:hover {
-  background: linear-gradient(135deg, rgba(143, 185, 168, 0.25), rgba(168, 197, 209, 0.25));
-  color: #2d3748;
+  background: rgba(124, 154, 238, 0.25);
+  color: #7c9aee;
+  border-color: rgba(124, 154, 238, 0.4);
 }
 
 .save-btn:active,

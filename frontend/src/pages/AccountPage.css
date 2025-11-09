@@ -1,111 +1,293 @@
-/* Account Page Styles - Meditative Theme */
+/* Account Page Styles - Dark Navy Theme with Beautiful UI */
 
 .account-page {
   min-height: 100vh;
-  background: linear-gradient(135deg, #f8faf9 0%, #eef5f2 100%);
-  padding: 40px 20px;
+  background: 
+    radial-gradient(circle at 20% 50%, rgba(108, 92, 231, 0.1) 0%, transparent 50%),
+    radial-gradient(circle at 80% 80%, rgba(162, 155, 254, 0.1) 0%, transparent 50%),
+    linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f1523 100%);
+  background-attachment: fixed;
+  padding: 80px 20px 40px;
+  color: #e0e0e0;
 }
 
 .account-container {
-  max-width: 900px;
+  max-width: 1000px;
   margin: 0 auto;
-  padding-top: 40px;
 }
 
+/* Page Header */
 .account-header {
-  text-align: center;
-  margin-bottom: 40px;
+  text-align: left;
+  margin-bottom: 48px;
+}
+
+.header-content {
+  display: flex;
+  align-items: center;
+  gap: 50px;
+}
+
+.header-icon {
+  width: 80px;
+  height: 80px;
+  border-radius: 20px;
+  background: linear-gradient(135deg, rgba(124, 154, 238, 0.2), rgba(139, 127, 218, 0.2));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #7c9aee;
+  box-shadow: 0 4px 16px rgba(124, 154, 238, 0.2);
+  border: 1px solid rgba(124, 154, 238, 0.3);
 }
 
 .account-header h1 {
   font-family: 'Crimson Text', serif;
-  font-size: 2.5rem;
-  color: #2d3748;
-  margin: 0 0 12px 0;
-  font-weight: 600;
-}
-
-.account-header p {
-  font-family: 'Lato', sans-serif;
-  font-size: 1.1rem;
-  color: #718096;
+  font-size: 2.8rem;
   margin: 0;
+  font-weight: 600;
+  background: linear-gradient(135deg, #7c9aee 0%, #8b7fda 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  line-height: 1.2;
 }
 
-.account-card {
-  background: rgba(255, 255, 255, 0.95);
-  backdrop-filter: blur(10px);
-  border-radius: 20px;
-  padding: 40px;
-  box-shadow: 0 8px 32px rgba(143, 185, 168, 0.15);
-  border: 1px solid rgba(143, 185, 168, 0.2);
+.header-subtitle {
+  font-family: 'Lato', sans-serif;
+  font-size: 1rem;
+  color: #a0aec0;
+  margin: 8px 0 0 0;
 }
 
+/* Account Sections */
 .account-section {
-  margin-bottom: 40px;
+  background: rgba(26, 26, 46, 0.6);
+  backdrop-filter: blur(20px);
+  border-radius: 24px;
+  padding: 32px;
+  margin-bottom: 24px;
+  border: 1px solid rgba(124, 154, 238, 0.15);
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.2);
+  transition: all 0.3s ease;
+}
+
+.account-section:hover {
+  border-color: rgba(124, 154, 238, 0.25);
+  box-shadow: 0 6px 32px rgba(124, 154, 238, 0.15);
 }
 
 .account-section:last-child {
   margin-bottom: 0;
 }
 
-.account-section h2 {
-  font-family: 'Crimson Text', serif;
-  font-size: 1.8rem;
-  color: #8fb9a8;
-  margin: 0 0 24px 0;
-  padding-bottom: 12px;
-  border-bottom: 2px solid rgba(143, 185, 168, 0.2);
+/* Section Header */
+.section-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 28px;
+  padding-bottom: 20px;
+  border-bottom: 1px solid rgba(124, 154, 238, 0.15);
 }
 
-.info-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-  gap: 24px;
-}
-
-.info-item {
-  background: linear-gradient(135deg, rgba(143, 185, 168, 0.08), rgba(168, 197, 209, 0.08));
-  padding: 20px;
-  border-radius: 12px;
-  border: 1px solid rgba(143, 185, 168, 0.15);
-}
-
-.info-item label {
-  font-family: 'Lato', sans-serif;
-  font-size: 0.85rem;
-  color: #8fb9a8;
-  font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-  display: block;
-  margin-bottom: 8px;
-}
-
-.info-item p {
-  font-family: 'Lato', sans-serif;
-  font-size: 1rem;
-  color: #2d3748;
-  margin: 0;
-  word-break: break-word;
-}
-
-.action-buttons {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-  gap: 16px;
-}
-
-.action-btn {
+.section-icon {
+  width: 40px;
+  height: 40px;
+  border-radius: 10px;
+  background: rgba(124, 154, 238, 0.1);
   display: flex;
   align-items: center;
   justify-content: center;
+  color: #7c9aee;
+}
+
+.section-header h2 {
+  font-family: 'Crimson Text', serif;
+  font-size: 1.8rem;
+  color: #e0e0e0;
+  margin: 0;
+  flex: 1;
+  font-weight: 600;
+}
+
+.edit-btn {
+  padding: 8px 20px;
+  background: rgba(124, 154, 238, 0.15);
+  border: 1px solid rgba(124, 154, 238, 0.3);
+  border-radius: 8px;
+  color: #7c9aee;
+  font-family: 'Lato', sans-serif;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.edit-btn:hover {
+  background: rgba(124, 154, 238, 0.25);
+  border-color: rgba(124, 154, 238, 0.5);
+  transform: translateY(-1px);
+}
+
+/* Section Content */
+.section-content {
+  animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Info Grid */
+.info-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 20px;
+}
+
+.info-field {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.info-field.full-width {
+  grid-column: 1 / -1;
+}
+
+.info-field label {
+  font-family: 'Lato', sans-serif;
+  font-size: 0.85rem;
+  color: #a8c5d1;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.info-value {
+  font-family: 'Lato', sans-serif;
+  font-size: 1rem;
+  color: #e0e0e0;
+  padding: 12px 16px;
+  background: rgba(22, 33, 62, 0.4);
+  border-radius: 10px;
+  border: 1px solid rgba(124, 154, 238, 0.1);
+}
+
+.info-note {
+  font-family: 'Lato', sans-serif;
+  font-size: 0.75rem;
+  color: #7c9aee;
+  font-style: italic;
+  margin-top: 4px;
+}
+
+/* Inputs */
+.meditative-input,
+.meditative-textarea {
+  width: 100%;
+  padding: 12px 16px;
+  background: rgba(22, 33, 62, 0.6);
+  border: 2px solid rgba(124, 154, 238, 0.2);
+  border-radius: 10px;
+  color: #e0e0e0;
+  font-family: 'Lato', sans-serif;
+  font-size: 1rem;
+  transition: all 0.3s ease;
+}
+
+.meditative-input:focus,
+.meditative-textarea:focus {
+  outline: none;
+  border-color: #7c9aee;
+  background: rgba(22, 33, 62, 0.8);
+  box-shadow: 0 0 0 4px rgba(124, 154, 238, 0.1);
+}
+
+.meditative-input::placeholder,
+.meditative-textarea::placeholder {
+  color: #6b7280;
+}
+
+.meditative-textarea {
+  resize: vertical;
+  min-height: 100px;
+}
+
+/* Detail Grid */
+.detail-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 20px;
+}
+
+.detail-item {
+  padding: 20px;
+  background: rgba(124, 154, 238, 0.05);
+  border-radius: 12px;
+  border: 1px solid rgba(124, 154, 238, 0.1);
+  transition: all 0.2s ease;
+}
+
+.detail-item:hover {
+  background: rgba(124, 154, 238, 0.1);
+  border-color: rgba(124, 154, 238, 0.2);
+  transform: translateY(-2px);
+}
+
+.detail-label {
+  font-family: 'Lato', sans-serif;
+  font-size: 0.8rem;
+  color: #a0aec0;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 8px;
+  font-weight: 600;
+}
+
+.detail-value {
+  font-family: 'Lato', sans-serif;
+  font-size: 1.05rem;
+  color: #e0e0e0;
+  font-weight: 500;
+}
+
+.detail-value.monospace {
+  font-family: 'Courier New', monospace;
+  font-size: 0.9rem;
+  word-break: break-all;
+}
+
+.detail-value.highlight {
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: #7c9aee;
+}
+
+/* Action Buttons */
+.action-buttons {
+  display: flex;
   gap: 12px;
-  padding: 18px 24px;
+  margin-top: 24px;
+  padding-top: 24px;
+  border-top: 1px solid rgba(124, 154, 238, 0.1);
+}
+
+.save-btn,
+.cancel-btn,
+.change-password-btn {
+  flex: 1;
+  padding: 14px 28px;
   border: none;
   border-radius: 12px;
-  background: linear-gradient(135deg, rgba(143, 185, 168, 0.15), rgba(168, 197, 209, 0.15));
-  color: #2d3748;
   font-family: 'Lato', sans-serif;
   font-size: 1rem;
   font-weight: 600;
@@ -114,53 +296,207 @@
   border: 2px solid transparent;
 }
 
-.action-btn:hover {
-  background: linear-gradient(135deg, #8fb9a8, #a8c5d1);
+.save-btn {
+  background: linear-gradient(135deg, #7c9aee, #8b7fda);
   color: white;
+  box-shadow: 0 4px 12px rgba(124, 154, 238, 0.3);
+}
+
+.save-btn:hover:not(:disabled) {
   transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(143, 185, 168, 0.3);
+  box-shadow: 0 6px 20px rgba(124, 154, 238, 0.4);
 }
 
-.action-btn:active {
-  transform: translateY(0);
+.save-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none;
 }
 
-.action-btn span {
-  font-size: 1.3rem;
+.cancel-btn {
+  background: rgba(124, 154, 238, 0.1);
+  color: #a0aec0;
+  border-color: rgba(124, 154, 238, 0.2);
+}
+
+.cancel-btn:hover:not(:disabled) {
+  background: rgba(124, 154, 238, 0.15);
+  color: #7c9aee;
+  border-color: rgba(124, 154, 238, 0.3);
+}
+
+.change-password-btn {
+  background: rgba(124, 154, 238, 0.15);
+  color: #7c9aee;
+  border-color: rgba(124, 154, 238, 0.3);
+  max-width: 200px;
+}
+
+.change-password-btn:hover {
+  background: rgba(124, 154, 238, 0.25);
+  border-color: rgba(124, 154, 238, 0.5);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(124, 154, 238, 0.3);
+}
+
+/* Security Section */
+.security-info {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.security-description {
+  font-family: 'Lato', sans-serif;
+  color: #a0aec0;
+  line-height: 1.6;
+  margin: 0;
+}
+
+.password-change-form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+/* Danger Zone */
+.danger-section {
+  border-color: rgba(233, 179, 160, 0.3);
+  background: rgba(233, 179, 160, 0.05);
+}
+
+.danger-section:hover {
+  border-color: rgba(233, 179, 160, 0.5);
+}
+
+.danger-section .section-header {
+  border-bottom-color: rgba(233, 179, 160, 0.2);
+}
+
+.danger-section h2 {
+  color: #e9b3a0;
+}
+
+.danger-info {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.danger-info p {
+  font-family: 'Lato', sans-serif;
+  color: #a0aec0;
+  line-height: 1.6;
+  margin: 0;
+}
+
+.delete-account-btn {
+  padding: 14px 28px;
+  background: rgba(233, 179, 160, 0.15);
+  border: 2px solid rgba(233, 179, 160, 0.3);
+  border-radius: 12px;
+  color: #e9b3a0;
+  font-family: 'Lato', sans-serif;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  max-width: 200px;
+}
+
+.delete-account-btn:hover {
+  background: rgba(233, 179, 160, 0.25);
+  border-color: rgba(233, 179, 160, 0.5);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(233, 179, 160, 0.3);
 }
 
 /* Responsive Design */
 @media (max-width: 768px) {
   .account-page {
-    padding: 20px 16px;
+    padding: 80px 16px 32px;
   }
 
-  .account-container {
-    padding-top: 20px;
-  }
-
-  .account-header h1 {
-    font-size: 2rem;
-  }
-
-  .account-header p {
-    font-size: 1rem;
-  }
-
-  .account-card {
-    padding: 24px;
-  }
-
-  .account-section h2 {
-    font-size: 1.5rem;
-  }
-
-  .info-grid {
-    grid-template-columns: 1fr;
+  .header-content {
+    flex-direction: column;
+    text-align: center;
     gap: 16px;
   }
 
-  .action-buttons {
+  .account-header h1 {
+    font-size: 2.2rem;
+  }
+
+  .account-section {
+    padding: 24px 20px;
+  }
+
+  .section-header {
+    flex-wrap: wrap;
+  }
+
+  .section-header h2 {
+    font-size: 1.5rem;
+  }
+
+  .info-grid,
+  .detail-grid {
     grid-template-columns: 1fr;
   }
+
+  .action-buttons {
+    flex-direction: column;
+  }
+
+  .save-btn,
+  .cancel-btn,
+  .change-password-btn,
+  .delete-account-btn {
+    max-width: 100%;
+  }
+}
+
+@media (max-width: 480px) {
+  .account-header h1 {
+    font-size: 1.8rem;
+  }
+
+  .header-icon {
+    width: 60px;
+    height: 60px;
+  }
+
+  .section-icon {
+    width: 36px;
+    height: 36px;
+  }
+
+  .section-header h2 {
+    font-size: 1.3rem;
+  }
+}
+
+/* Smooth Transitions */
+* {
+  transition-property: background, border-color, transform, box-shadow;
+  transition-duration: 0.2s;
+  transition-timing-function: ease;
+}
+
+/* Custom Scrollbar for this page */
+.account-page::-webkit-scrollbar {
+  width: 10px;
+}
+
+.account-page::-webkit-scrollbar-track {
+  background: rgba(26, 26, 46, 0.5);
+}
+
+.account-page::-webkit-scrollbar-thumb {
+  background: rgba(124, 154, 238, 0.3);
+  border-radius: 5px;
+}
+
+.account-page::-webkit-scrollbar-thumb:hover {
+  background: rgba(124, 154, 238, 0.5);
 }

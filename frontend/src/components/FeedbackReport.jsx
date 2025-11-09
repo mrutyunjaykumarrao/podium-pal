@@ -74,12 +74,6 @@ function FeedbackReport({ data }) {
 
   return (
     <div className="modern-report" ref={reportRef}>
-      {/* Back to Home Button */}
-      <button className="back-home-btn" onClick={() => window.location.href = '/'}>
-        <HomeIcon size={20} />
-        <span>Return to Practice</span>
-      </button>
-
       {/* Dashboard Header */}
       <div className="dashboard-header">
         <div className="header-content">

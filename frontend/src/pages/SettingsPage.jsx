@@ -1,11 +1,13 @@
 import React from 'react';
-import NavMenu from '../components/NavMenu';
+import ProfileMenu from '../components/ProfileMenu';
+import ReturnToPracticeButton from '../components/ReturnToPracticeButton';
 import './SettingsPage.css';
 
 function SettingsPage() {
   return (
     <div className="settings-page">
-      <NavMenu />
+      <ProfileMenu />
+      <ReturnToPracticeButton />
       <div className="settings-container">
         <div className="settings-header">
           <h1>⚙️ Settings</h1>
@@ -38,12 +40,11 @@ function SettingsPage() {
             <div className="setting-item">
               <label>Default AI Personality</label>
               <select defaultValue="supportive">
-                <option value="supportive">Supportive</option>
-                <option value="direct">Direct</option>
-                <option value="critical">Critical</option>
-                <option value="humorous">Humorous</option>
-                <option value="mentor">Mentor</option>
-                <option value="professional">Professional</option>
+                <option value="supportive">🌱 Supportive - Encouraging and nurturing</option>
+                <option value="direct">🎯 Direct - Straightforward and concise</option>
+                <option value="critical">🔍 Critical - Detailed and analytical</option>
+                <option value="mentor">🧘 Mentor - Wise and reflective</option>
+                <option value="professional">💼 Professional - Formal and structured</option>
               </select>
             </div>
           </div>

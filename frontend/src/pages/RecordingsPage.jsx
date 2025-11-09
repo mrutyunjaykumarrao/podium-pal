@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import NavMenu from '../components/NavMenu';
+import ProfileMenu from '../components/ProfileMenu';
+import ReturnToPracticeButton from '../components/ReturnToPracticeButton';
 import './RecordingsPage.css';
 
 function RecordingsPage() {
@@ -50,7 +51,8 @@ function RecordingsPage() {
   if (loading) {
     return (
       <div className="recordings-page">
-        <NavMenu />
+        <ProfileMenu />
+        <ReturnToPracticeButton />
         <div className="recordings-loading">
           <div className="spinner"></div>
           <p>🧘 Loading your recordings...</p>
@@ -61,7 +63,8 @@ function RecordingsPage() {
 
   return (
     <div className="recordings-page">
-      <NavMenu />
+      <ProfileMenu />
+      <ReturnToPracticeButton />
       <div className="recordings-container">
         <div className="recordings-header">
           <h1>📊 Your Recordings</h1>

@@ -1,4 +1,4 @@
-/* Feedback Page Container */
+/* Feedback Page Container - Dark Navy Theme (Matching Home) */
 .feedback-page-container {
   width: 100%;
   min-height: 100vh;
@@ -6,11 +6,17 @@
   margin: 0 auto;
   padding: 20px;
   position: relative;
+  background: 
+    radial-gradient(circle at 20% 50%, rgba(108, 92, 231, 0.1) 0%, transparent 50%),
+    radial-gradient(circle at 80% 80%, rgba(162, 155, 254, 0.1) 0%, transparent 50%),
+    linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f1523 100%);
+  background-attachment: fixed;
+  color: #e0e0e0;
 }
 
 .feedback-page-container h1 {
   text-align: center;
-  background: linear-gradient(135deg, #a8c5d1, #b8d4c8);
+  background: linear-gradient(135deg, #7c9aee 0%, #8b7fda 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -30,16 +36,21 @@
   justify-content: center;
   padding: 40px;
   text-align: center;
+  background: 
+    radial-gradient(circle at 20% 50%, rgba(108, 92, 231, 0.1) 0%, transparent 50%),
+    radial-gradient(circle at 80% 80%, rgba(162, 155, 254, 0.1) 0%, transparent 50%),
+    linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f1523 100%);
+  background-attachment: fixed;
 }
 
 .feedback-loading {
-  color: #b8c9d9;
+  color: #a8c5d1;
   font-size: 1.2rem;
   font-family: 'Lato', sans-serif;
 }
 
 .feedback-error {
-  color: #d4a5a5;
+  color: #e9b3a0;
 }
 
 .feedback-error p {
@@ -51,11 +62,11 @@
 .feedback-error button,
 .back-button {
   padding: 12px 24px;
-  background: linear-gradient(135deg, rgba(168, 197, 209, 0.2), rgba(184, 212, 200, 0.2));
+  background: rgba(124, 154, 238, 0.15);
   backdrop-filter: blur(10px);
-  border: 2px solid rgba(168, 197, 209, 0.3);
+  border: 2px solid rgba(124, 154, 238, 0.3);
   border-radius: 12px;
-  color: #a8c5d1;
+  color: #7c9aee;
   font-size: 1rem;
   font-weight: 500;
   cursor: pointer;
@@ -65,10 +76,10 @@
 
 .feedback-error button:hover,
 .back-button:hover {
-  background: linear-gradient(135deg, rgba(168, 197, 209, 0.3), rgba(184, 212, 200, 0.3));
-  border-color: rgba(168, 197, 209, 0.5);
+  background: rgba(124, 154, 238, 0.25);
+  border-color: rgba(124, 154, 238, 0.5);
   transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(168, 197, 209, 0.2);
+  box-shadow: 0 4px 12px rgba(124, 154, 238, 0.3);
 }
 
 /* Responsive */

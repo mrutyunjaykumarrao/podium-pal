@@ -1,7 +1,8 @@
 import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import FeedbackReport from "../components/FeedbackReport";
-import NavMenu from "../components/NavMenu";
+import ProfileMenu from "../components/ProfileMenu";
+import ReturnToPracticeButton from "../components/ReturnToPracticeButton";
 import "./FeedbackPage.css";
 
 function FeedbackPage() {
@@ -74,7 +75,8 @@ function FeedbackPage() {
 
   return (
     <div className="feedback-page-container">
-      <NavMenu />
+      <ProfileMenu />
+      <ReturnToPracticeButton />
       <FeedbackReport data={data} />
     </div>
   );
