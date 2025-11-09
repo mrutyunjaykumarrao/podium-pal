@@ -1,0 +1,30 @@
+{
+  "sessionId": "97b088dc-a539-4ee4-8cf4-2016f1df374a",
+  "timestamp": "2025-11-09T03:25:55.050445",
+  "transcript": "hello hello",
+  "userGoal": "jjnmknm",
+  "duration": 8,
+  "audioPath": null,
+  "feedback": {
+    "sessionId": "97b088dc-a539-4ee4-8cf4-2016f1df374a",
+    "pace": 15,
+    "fillerWords": {},
+    "aiSummary": "The speaker uttered a simple greeting, repeating 'hello' twice.",
+    "clarityScore": 60,
+    "confidenceScore": 70,
+    "engagementScore": 50,
+    "structureScore": 40,
+    "overall_score": 5.5,
+    "constructiveTip": "To make a bigger impact, consider expanding on your greeting with a purpose, such as introducing yourself or stating the topic you'll be discussing. Adding a brief statement of intent can immediately capture your audience's attention and provide context for your speech.",
+    "strengths": [
+      "The speaker started with a greeting, which is a good way to initiate a conversation.",
+      "Clear enunciation of the word 'hello'.",
+      "Direct opening."
+    ],
+    "improvements": [
+      "Add more content to create a meaningful message.",
+      "Introduce a clear structure with a beginning, middle, and end.",
+      "Vary vocal delivery to create a more engaging experience."
+    ]
+  }
+}

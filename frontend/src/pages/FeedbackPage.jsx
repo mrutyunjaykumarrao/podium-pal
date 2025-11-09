@@ -2,11 +2,13 @@ import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import FeedbackReport from "../components/FeedbackReport";
 import NavMenu from "../components/NavMenu";
-import "./FeedbackPage.css";
+import { useAuth } from "../contexts/AuthContext";
+import { saveRecording } from "../services/recordingsService";
 
 function FeedbackPage() {
   const { id } = useParams();
   const navigate = useNavigate();
+  const { currentUser } = useAuth();
   const [data, setData] = useState(null);
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -40,8 +42,78 @@ function FeedbackPage() {
           "[FeedbackPage] Feedback received:",
           json
         );
-        setData(json);
+
+        // Backend now returns full session data with structure:
+        // { sessionId, timestamp, transcript, userGoal, duration, audioPath, feedback: {...} }
+        setData(json.feedback || json); // Display the feedback object
         setError(null);
+
+        // Save to Firestore if user is logged in
+        if (currentUser) {
+          try {
+            console.log(
+              "[FeedbackPage] Attempting to save to Firestore..."
+            );
+            console.log(
+              "[FeedbackPage] User ID:",
+              currentUser.uid
+            );
+            console.log(
+              "[FeedbackPage] Session data:",
+              json
+            );
+
+            // Extract from full session data
+            const feedbackData = json.feedback || json;
+            const recordingData = {
+              goal: json.userGoal || "Speech recording",
+              transcript: json.transcript || "",
+              transcriptPreview:
+                (json.transcript || "").substring(0, 100) +
+                "...",
+              duration: json.duration || 0,
+              wordCount: json.transcript
+                ? json.transcript
+                    .split(/\s+/)
+                    .filter((w) => w.length > 0).length
+                : 0,
+              wpm: feedbackData.pace || 0,
+              score: feedbackData.overall_score || 0,
+              sessionId: json.sessionId || id,
+              audioFilePath: null,
+              feedback: feedbackData,
+            };
+
+            console.log(
+              "[FeedbackPage] Recording data to save:",
+              recordingData
+            );
+            await saveRecording(
+              currentUser.uid,
+              recordingData
+            );
+            console.log(
+              "[FeedbackPage] ✅ Feedback saved to Firestore"
+            );
+          } catch (saveError) {
+            console.error(
+              "[FeedbackPage] ❌ Failed to save to Firestore:",
+              saveError
+            );
+            console.error(
+              "[FeedbackPage] Error details:",
+              saveError.message,
+              saveError.stack
+            );
+          }
+        } else {
+          console.log(
+            "[FeedbackPage] Not saving - currentUser:",
+            !!currentUser,
+            "json:",
+            !!json
+          );
+        }
       } catch (err) {
         console.error(
           "[FeedbackPage] Error fetching feedback:",
@@ -54,27 +126,26 @@ function FeedbackPage() {
     };
 
     fetchFeedback();
-  }, [id, navigate]);
+  }, [id, navigate, currentUser]);
 
   if (loading)
     return (
-      <div className="feedback-loading">
-        <div>🧘 Loading your insights...</div>
-      </div>
+      <div style={{ padding: 20 }}>Loading feedback...</div>
     );
   if (error)
     return (
-      <div className="feedback-error">
+      <div style={{ padding: 20 }}>
         <p>Error loading feedback: {error}</p>
         <button onClick={() => navigate("/")}>
-          Return Home
+          Go back
         </button>
       </div>
     );
 
   return (
-    <div className="feedback-page-container">
+    <div style={{ padding: 20 }}>
       <NavMenu />
+      <h1>Feedback for session: {id}</h1>
       <FeedbackReport data={data} />
     </div>
   );
